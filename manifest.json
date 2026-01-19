@@ -1,9 +1,9 @@
 {
-  "id": "obsidian-floating-explorer",
+  "id": "floating-explorer",
   "name": "Floating Explorer",
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
-  "description": "A floating folder explorer icon in the top-right corner of each page",
+  "description": "A floating folder explorer icon in the top-right corner of each page.",
   "author": "zwmjohn-cool",
   "authorUrl": "https://github.com/zwmjohn-cool",
   "isDesktopOnly": false
