@@ -1,0 +1,223 @@
+/* Floating explorer icon */
+.floating-explorer-icon {
+	position: absolute;
+	top: 60px;
+	right: 20px;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 1000;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.floating-explorer-icon:hover {
+	background-color: var(--background-modifier-hover);
+	transform: scale(1.05);
+}
+
+.floating-explorer-icon svg {
+	color: var(--text-muted);
+}
+
+.floating-explorer-icon:hover svg {
+	color: var(--text-normal);
+}
+
+/* Floating folder panel */
+.floating-folder-panel {
+	position: absolute;
+	top: 100px;
+	right: 20px;
+	width: 300px;
+	max-height: 70vh;
+	background-color: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	z-index: 999;
+	overflow-y: auto;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	padding: 8px 0;
+}
+
+/* Scrollbar styling */
+.floating-folder-panel::-webkit-scrollbar {
+	width: 6px;
+}
+
+.floating-folder-panel::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.floating-folder-panel::-webkit-scrollbar-thumb {
+	background-color: var(--background-modifier-border);
+	border-radius: 3px;
+}
+
+.floating-folder-panel::-webkit-scrollbar-thumb:hover {
+	background-color: var(--text-muted);
+}
+
+.folder-tree-container {
+	padding: 4px;
+}
+
+/* Folder items */
+.folder-item {
+	user-select: none;
+}
+
+.folder-header {
+	display: flex;
+	align-items: center;
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 4px;
+	margin: 1px 4px;
+	transition: background-color 0.15s ease;
+}
+
+.folder-header:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+/* Folder toggle (expand/collapse) */
+.folder-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	font-size: 10px;
+	color: var(--text-muted);
+	transition: transform 0.2s ease;
+}
+
+/* Folder icon */
+.folder-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 6px;
+}
+
+.folder-icon svg {
+	color: var(--text-accent);
+}
+
+/* Folder name */
+.folder-name {
+	font-size: 13px;
+	color: var(--text-normal);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 1;
+}
+
+/* Folder children container */
+.folder-children {
+	overflow: hidden;
+}
+
+/* File items */
+.file-item {
+	display: flex;
+	align-items: center;
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 4px;
+	margin: 1px 4px;
+	transition: background-color 0.15s ease;
+}
+
+.file-item:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+/* File icon */
+.file-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 6px;
+}
+
+.file-icon svg {
+	color: var(--text-muted);
+}
+
+/* File name */
+.file-name {
+	font-size: 13px;
+	color: var(--text-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 1;
+}
+
+.file-item:hover .file-name {
+	color: var(--text-normal);
+}
+
+/* Context menu */
+.folder-context-menu {
+	background-color: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	z-index: 2000;
+	padding: 4px 0;
+	min-width: 150px;
+}
+
+.context-menu-item {
+	padding: 8px 16px;
+	font-size: 13px;
+	color: var(--text-normal);
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.context-menu-item:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+/* Unfocus bar */
+.unfocus-bar {
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+	margin: 4px 8px 8px 8px;
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.unfocus-bar:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.unfocus-icon {
+	font-size: 14px;
+	margin-right: 8px;
+	color: var(--text-accent);
+}
+
+.unfocus-text {
+	font-size: 13px;
+	color: var(--text-normal);
+	font-weight: 500;
+}
+
