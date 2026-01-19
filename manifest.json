@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
   "description": "在每个页面右上角显示悬浮的文件夹浏览器图标",
-  "author": "Your Name",
-  "authorUrl": "https://github.com/yourusername",
+  "author": "zwmjohn-cool",
+  "authorUrl": "https://github.com/zwmjohn-cool",
   "isDesktopOnly": false
 }
