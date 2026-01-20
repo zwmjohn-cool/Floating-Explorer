@@ -23,6 +23,53 @@ __export(main_exports, {
 });
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
+var InputModal = class extends import_obsidian.Modal {
+  constructor(app, title, placeholder, onSubmit) {
+    super(app);
+    this.result = "";
+    this.title = title;
+    this.placeholder = placeholder;
+    this.onSubmit = onSubmit;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.createEl("h2", { text: this.title });
+    const inputEl = contentEl.createEl("input", {
+      type: "text",
+      placeholder: this.placeholder,
+      value: this.placeholder
+    });
+    inputEl.style.width = "100%";
+    inputEl.style.marginBottom = "10px";
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        this.result = inputEl.value;
+        this.close();
+        this.onSubmit(this.result);
+      }
+    });
+    const buttonContainer = contentEl.createDiv();
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.justifyContent = "flex-end";
+    buttonContainer.style.gap = "10px";
+    const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+    cancelBtn.addEventListener("click", () => {
+      this.close();
+    });
+    const submitBtn = buttonContainer.createEl("button", { text: "Confirm", cls: "mod-cta" });
+    submitBtn.addEventListener("click", () => {
+      this.result = inputEl.value;
+      this.close();
+      this.onSubmit(this.result);
+    });
+    inputEl.focus();
+    inputEl.select();
+  }
+  onClose() {
+    const { contentEl } = this;
+    contentEl.empty();
+  }
+};
 var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
   constructor() {
     super(...arguments);
@@ -270,6 +317,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
         folderHeader.addEventListener("contextmenu", (e) => {
           e.preventDefault();
           e.stopPropagation();
+          state.folderPanel.querySelectorAll(".folder-context-menu").forEach((menu2) => menu2.remove());
           const menu = document.createElement("div");
           menu.addClass("folder-context-menu");
           menu.style.position = "absolute";
@@ -279,9 +327,95 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           menu.style.left = `${relativeX}px`;
           menu.style.top = `${relativeY}px`;
           const isFocused = state.focusedFolder === child.path;
-          const menuItem = menu.createDiv("context-menu-item");
-          menuItem.textContent = isFocused ? "Unfocus" : "Focus Mode";
-          menuItem.addEventListener("click", () => {
+          const newFileItem = menu.createDiv("context-menu-item");
+          newFileItem.textContent = "New File (\u2318 N)";
+          newFileItem.addEventListener("click", (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            new InputModal(this.app, "New File", "Untitled.md", async (fileName) => {
+              if (fileName) {
+                let filePath = child.path;
+                if (filePath === "/") {
+                  filePath = fileName;
+                } else {
+                  filePath = `${child.path}/${fileName}`;
+                }
+                console.log("\u521B\u5EFA\u6587\u4EF6\u8DEF\u5F84:", filePath);
+                try {
+                  const newFile = await this.app.vault.create(filePath, "");
+                  console.log("\u6587\u4EF6\u521B\u5EFA\u6210\u529F:", newFile);
+                  const leaf = this.app.workspace.getLeaf();
+                  await leaf.openFile(newFile);
+                  state.expandedFolders.add(child.path);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
+                  new import_obsidian.Modal(this.app).open();
+                }
+              }
+            }).open();
+          });
+          const newFolderItem = menu.createDiv("context-menu-item");
+          newFolderItem.textContent = "New Folder";
+          newFolderItem.addEventListener("click", (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            new InputModal(this.app, "New Folder", "New Folder", async (folderName2) => {
+              if (folderName2) {
+                let folderPath = child.path;
+                if (folderPath === "/") {
+                  folderPath = folderName2;
+                } else {
+                  folderPath = `${child.path}/${folderName2}`;
+                }
+                console.log("\u521B\u5EFA\u6587\u4EF6\u5939\u8DEF\u5F84:", folderPath);
+                try {
+                  await this.app.vault.createFolder(folderPath);
+                  console.log("\u6587\u4EF6\u5939\u521B\u5EFA\u6210\u529F:", folderPath);
+                  state.expandedFolders.add(child.path);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
+                }
+              }
+            }).open();
+          });
+          const deleteItem = menu.createDiv("context-menu-item");
+          deleteItem.textContent = "Delete Folder";
+          deleteItem.style.color = "var(--text-error)";
+          deleteItem.addEventListener("click", async (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            const confirmModal = new import_obsidian.Modal(this.app);
+            confirmModal.titleEl.setText("Confirm Delete");
+            confirmModal.contentEl.createEl("p", {
+              text: `Are you sure you want to delete folder "${child.name}"? This action cannot be undone.`
+            });
+            const buttonContainer = confirmModal.contentEl.createDiv();
+            buttonContainer.style.display = "flex";
+            buttonContainer.style.justifyContent = "flex-end";
+            buttonContainer.style.gap = "10px";
+            buttonContainer.style.marginTop = "20px";
+            const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+            cancelBtn.addEventListener("click", () => {
+              confirmModal.close();
+            });
+            const deleteBtn = buttonContainer.createEl("button", { text: "Delete", cls: "mod-warning" });
+            deleteBtn.addEventListener("click", async () => {
+              confirmModal.close();
+              try {
+                await this.app.vault.delete(child, true);
+                console.log("\u6587\u4EF6\u5939\u5220\u9664\u6210\u529F:", child.path);
+                this.buildFolderTree(leafId);
+              } catch (error) {
+                console.error("\u5220\u9664\u6587\u4EF6\u5939\u5931\u8D25:", error);
+              }
+            });
+            confirmModal.open();
+          });
+          const focusMenuItem = menu.createDiv("context-menu-item");
+          focusMenuItem.textContent = isFocused ? "Unfocus" : "Focus Mode";
+          focusMenuItem.addEventListener("click", () => {
             if (isFocused) {
               state.focusedFolder = null;
             } else {
@@ -290,12 +424,16 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             this.buildFolderTree(leafId);
             menu.remove();
           });
-          const closeMenu = () => {
-            menu.remove();
-            document.removeEventListener("click", closeMenu);
+          const closeMenu = (event) => {
+            if (!menu.contains(event.target)) {
+              menu.remove();
+              document.removeEventListener("click", closeMenu);
+              state.folderPanel.removeEventListener("click", closeMenu);
+            }
           };
           setTimeout(() => {
             document.addEventListener("click", closeMenu);
+            state.folderPanel.addEventListener("click", closeMenu);
           }, 10);
           state.folderPanel.appendChild(menu);
         });
@@ -317,6 +455,117 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           if (state.folderPanel) {
             state.folderPanel.style.display = "none";
           }
+        });
+        fileItem.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          state.folderPanel.querySelectorAll(".folder-context-menu").forEach((menu2) => menu2.remove());
+          const menu = document.createElement("div");
+          menu.addClass("folder-context-menu");
+          menu.style.position = "absolute";
+          const panelRect = state.folderPanel.getBoundingClientRect();
+          const relativeX = e.clientX - panelRect.left;
+          const relativeY = e.clientY - panelRect.top;
+          menu.style.left = `${relativeX}px`;
+          menu.style.top = `${relativeY}px`;
+          const parentFolder = child.parent;
+          const newFileItem = menu.createDiv("context-menu-item");
+          newFileItem.textContent = "New File (\u2318 N)";
+          newFileItem.addEventListener("click", (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            new InputModal(this.app, "New File", "Untitled.md", async (fileName2) => {
+              if (fileName2 && parentFolder) {
+                let filePath = parentFolder.path;
+                if (filePath === "/") {
+                  filePath = fileName2;
+                } else {
+                  filePath = `${parentFolder.path}/${fileName2}`;
+                }
+                console.log("\u521B\u5EFA\u6587\u4EF6\u8DEF\u5F84:", filePath);
+                try {
+                  const newFile = await this.app.vault.create(filePath, "");
+                  console.log("\u6587\u4EF6\u521B\u5EFA\u6210\u529F:", newFile);
+                  const leaf = this.app.workspace.getLeaf();
+                  await leaf.openFile(newFile);
+                  state.expandedFolders.add(parentFolder.path);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
+                }
+              }
+            }).open();
+          });
+          const newFolderItem = menu.createDiv("context-menu-item");
+          newFolderItem.textContent = "New Folder";
+          newFolderItem.addEventListener("click", (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            new InputModal(this.app, "New Folder", "New Folder", async (folderName) => {
+              if (folderName && parentFolder) {
+                let folderPath = parentFolder.path;
+                if (folderPath === "/") {
+                  folderPath = folderName;
+                } else {
+                  folderPath = `${parentFolder.path}/${folderName}`;
+                }
+                console.log("\u521B\u5EFA\u6587\u4EF6\u5939\u8DEF\u5F84:", folderPath);
+                try {
+                  await this.app.vault.createFolder(folderPath);
+                  console.log("\u6587\u4EF6\u5939\u521B\u5EFA\u6210\u529F:", folderPath);
+                  state.expandedFolders.add(parentFolder.path);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
+                }
+              }
+            }).open();
+          });
+          const deleteItem = menu.createDiv("context-menu-item");
+          deleteItem.textContent = "Delete File";
+          deleteItem.style.color = "var(--text-error)";
+          deleteItem.addEventListener("click", async (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            const confirmModal = new import_obsidian.Modal(this.app);
+            confirmModal.titleEl.setText("Confirm Delete");
+            confirmModal.contentEl.createEl("p", {
+              text: `Are you sure you want to delete file "${child.name}"? This action cannot be undone.`
+            });
+            const buttonContainer = confirmModal.contentEl.createDiv();
+            buttonContainer.style.display = "flex";
+            buttonContainer.style.justifyContent = "flex-end";
+            buttonContainer.style.gap = "10px";
+            buttonContainer.style.marginTop = "20px";
+            const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+            cancelBtn.addEventListener("click", () => {
+              confirmModal.close();
+            });
+            const deleteBtn = buttonContainer.createEl("button", { text: "Delete", cls: "mod-warning" });
+            deleteBtn.addEventListener("click", async () => {
+              confirmModal.close();
+              try {
+                await this.app.vault.delete(child);
+                console.log("\u6587\u4EF6\u5220\u9664\u6210\u529F:", child.path);
+                this.buildFolderTree(leafId);
+              } catch (error) {
+                console.error("\u5220\u9664\u6587\u4EF6\u5931\u8D25:", error);
+              }
+            });
+            confirmModal.open();
+          });
+          const closeMenu = (event) => {
+            if (!menu.contains(event.target)) {
+              menu.remove();
+              document.removeEventListener("click", closeMenu);
+              state.folderPanel.removeEventListener("click", closeMenu);
+            }
+          };
+          setTimeout(() => {
+            document.addEventListener("click", closeMenu);
+            state.folderPanel.addEventListener("click", closeMenu);
+          }, 10);
+          state.folderPanel.appendChild(menu);
         });
       }
     });

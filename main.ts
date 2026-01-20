@@ -1,4 +1,64 @@
-import { Plugin, WorkspaceLeaf, TFile, TFolder } from 'obsidian';
+import { Plugin, WorkspaceLeaf, TFile, TFolder, Modal, App } from 'obsidian';
+
+class InputModal extends Modal {
+	result: string = '';
+	onSubmit: (result: string) => void;
+	placeholder: string;
+	title: string;
+
+	constructor(app: App, title: string, placeholder: string, onSubmit: (result: string) => void) {
+		super(app);
+		this.title = title;
+		this.placeholder = placeholder;
+		this.onSubmit = onSubmit;
+	}
+
+	onOpen() {
+		const { contentEl } = this;
+		contentEl.createEl('h2', { text: this.title });
+
+		const inputEl = contentEl.createEl('input', {
+			type: 'text',
+			placeholder: this.placeholder,
+			value: this.placeholder
+		});
+		inputEl.style.width = '100%';
+		inputEl.style.marginBottom = '10px';
+
+		inputEl.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				this.result = inputEl.value;
+				this.close();
+				this.onSubmit(this.result);
+			}
+		});
+
+		const buttonContainer = contentEl.createDiv();
+		buttonContainer.style.display = 'flex';
+		buttonContainer.style.justifyContent = 'flex-end';
+		buttonContainer.style.gap = '10px';
+
+		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+		cancelBtn.addEventListener('click', () => {
+			this.close();
+		});
+
+		const submitBtn = buttonContainer.createEl('button', { text: 'Confirm', cls: 'mod-cta' });
+		submitBtn.addEventListener('click', () => {
+			this.result = inputEl.value;
+			this.close();
+			this.onSubmit(this.result);
+		});
+
+		inputEl.focus();
+		inputEl.select();
+	}
+
+	onClose() {
+		const { contentEl } = this;
+		contentEl.empty();
+	}
+}
 
 interface LeafState {
 	expandedFolders: Set<string>;
@@ -335,6 +395,9 @@ export default class FloatingExplorerPlugin extends Plugin {
 					e.preventDefault();
 					e.stopPropagation();
 
+					// 移除所有现有的右键菜单
+					state.folderPanel.querySelectorAll('.folder-context-menu').forEach(menu => menu.remove());
+
 					const menu = document.createElement('div');
 					menu.addClass('folder-context-menu');
 					menu.style.position = 'absolute';
@@ -349,10 +412,125 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 					const isFocused = state.focusedFolder === child.path;
 
-					const menuItem = menu.createDiv('context-menu-item');
-					menuItem.textContent = isFocused ? 'Unfocus' : 'Focus Mode';
+					// 创建新文件菜单项
+					const newFileItem = menu.createDiv('context-menu-item');
+					newFileItem.textContent = 'New File (⌘ N)';
+					newFileItem.addEventListener('click', (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
 
-					menuItem.addEventListener('click', () => {
+						new InputModal(this.app, 'New File', 'Untitled.md', async (fileName) => {
+							if (fileName) {
+								// 处理路径，确保正确
+								let filePath = child.path;
+								if (filePath === '/') {
+									filePath = fileName;
+								} else {
+									filePath = `${child.path}/${fileName}`;
+								}
+
+								console.log('创建文件路径:', filePath);
+
+								try {
+									const newFile = await this.app.vault.create(filePath, '');
+									console.log('文件创建成功:', newFile);
+
+									// 打开新创建的文件
+									const leaf = this.app.workspace.getLeaf();
+									await leaf.openFile(newFile);
+
+									// 展开父文件夹
+									state.expandedFolders.add(child.path);
+									// 重新构建树以显示新文件
+									this.buildFolderTree(leafId);
+								} catch (error) {
+									console.error('创建文件失败:', error);
+									new Modal(this.app).open();
+								}
+							}
+						}).open();
+					});
+
+					// 创建新文件夹菜单项
+					const newFolderItem = menu.createDiv('context-menu-item');
+					newFolderItem.textContent = 'New Folder';
+					newFolderItem.addEventListener('click', (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						new InputModal(this.app, 'New Folder', 'New Folder', async (folderName) => {
+							if (folderName) {
+								// 处理路径，确保正确
+								let folderPath = child.path;
+								if (folderPath === '/') {
+									folderPath = folderName;
+								} else {
+									folderPath = `${child.path}/${folderName}`;
+								}
+
+								console.log('创建文件夹路径:', folderPath);
+
+								try {
+									await this.app.vault.createFolder(folderPath);
+									console.log('文件夹创建成功:', folderPath);
+
+									// 展开父文件夹以显示新创建的文件夹
+									state.expandedFolders.add(child.path);
+									// 重新构建树
+									this.buildFolderTree(leafId);
+								} catch (error) {
+									console.error('创建文件夹失败:', error);
+								}
+							}
+						}).open();
+					});
+
+					// 删除文件夹菜单项
+					const deleteItem = menu.createDiv('context-menu-item');
+					deleteItem.textContent = 'Delete Folder';
+					deleteItem.style.color = 'var(--text-error)';
+					deleteItem.addEventListener('click', async (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						// 创建确认对话框
+						const confirmModal = new Modal(this.app);
+						confirmModal.titleEl.setText('Confirm Delete');
+						confirmModal.contentEl.createEl('p', {
+							text: `Are you sure you want to delete folder "${child.name}"? This action cannot be undone.`
+						});
+
+						const buttonContainer = confirmModal.contentEl.createDiv();
+						buttonContainer.style.display = 'flex';
+						buttonContainer.style.justifyContent = 'flex-end';
+						buttonContainer.style.gap = '10px';
+						buttonContainer.style.marginTop = '20px';
+
+						const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+						cancelBtn.addEventListener('click', () => {
+							confirmModal.close();
+						});
+
+						const deleteBtn = buttonContainer.createEl('button', { text: 'Delete', cls: 'mod-warning' });
+						deleteBtn.addEventListener('click', async () => {
+							confirmModal.close();
+							try {
+								await this.app.vault.delete(child, true);
+								console.log('文件夹删除成功:', child.path);
+								// 重新构建树
+								this.buildFolderTree(leafId);
+							} catch (error) {
+								console.error('删除文件夹失败:', error);
+							}
+						});
+
+						confirmModal.open();
+					});
+
+					// Focus Mode 菜单项
+					const focusMenuItem = menu.createDiv('context-menu-item');
+					focusMenuItem.textContent = isFocused ? 'Unfocus' : 'Focus Mode';
+					focusMenuItem.addEventListener('click', () => {
 						if (isFocused) {
 							// Unfocus
 							state.focusedFolder = null;
@@ -365,14 +543,20 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 					});
 
-					// 点击外部关闭菜单
-					const closeMenu = () => {
-						menu.remove();
-						document.removeEventListener('click', closeMenu);
+					// 点击外部或面板内其他地方关闭菜单
+					const closeMenu = (event: MouseEvent) => {
+						// 检查点击是否在菜单外部
+						if (!menu.contains(event.target as Node)) {
+							menu.remove();
+							document.removeEventListener('click', closeMenu);
+							state.folderPanel.removeEventListener('click', closeMenu);
+						}
 					};
 
+					// 延迟添加事件监听器，避免立即触发
 					setTimeout(() => {
 						document.addEventListener('click', closeMenu);
+						state.folderPanel.addEventListener('click', closeMenu);
 					}, 10);
 
 					state.folderPanel.appendChild(menu);
@@ -402,6 +586,162 @@ export default class FloatingExplorerPlugin extends Plugin {
 					if (state.folderPanel) {
 						state.folderPanel.style.display = 'none';
 					}
+				});
+
+				// 文件右键菜单
+				fileItem.addEventListener('contextmenu', (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					// 移除所有现有的右键菜单
+					state.folderPanel.querySelectorAll('.folder-context-menu').forEach(menu => menu.remove());
+
+					const menu = document.createElement('div');
+					menu.addClass('folder-context-menu');
+					menu.style.position = 'absolute';
+
+					// 计算相对于folderPanel的位置
+					const panelRect = state.folderPanel.getBoundingClientRect();
+					const relativeX = e.clientX - panelRect.left;
+					const relativeY = e.clientY - panelRect.top;
+
+					menu.style.left = `${relativeX}px`;
+					menu.style.top = `${relativeY}px`;
+
+					// 获取文件所在的文件夹
+					const parentFolder = child.parent;
+
+					// 创建新文件菜单项
+					const newFileItem = menu.createDiv('context-menu-item');
+					newFileItem.textContent = 'New File (⌘ N)';
+					newFileItem.addEventListener('click', (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						new InputModal(this.app, 'New File', 'Untitled.md', async (fileName) => {
+							if (fileName && parentFolder) {
+								// 处理路径，确保正确
+								let filePath = parentFolder.path;
+								if (filePath === '/') {
+									filePath = fileName;
+								} else {
+									filePath = `${parentFolder.path}/${fileName}`;
+								}
+
+								console.log('创建文件路径:', filePath);
+
+								try {
+									const newFile = await this.app.vault.create(filePath, '');
+									console.log('文件创建成功:', newFile);
+
+									// 打开新创建的文件
+									const leaf = this.app.workspace.getLeaf();
+									await leaf.openFile(newFile);
+
+									// 展开父文件夹
+									state.expandedFolders.add(parentFolder.path);
+									// 重新构建树以显示新文件
+									this.buildFolderTree(leafId);
+								} catch (error) {
+									console.error('创建文件失败:', error);
+								}
+							}
+						}).open();
+					});
+
+					// 创建新文件夹菜单项
+					const newFolderItem = menu.createDiv('context-menu-item');
+					newFolderItem.textContent = 'New Folder';
+					newFolderItem.addEventListener('click', (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						new InputModal(this.app, 'New Folder', 'New Folder', async (folderName) => {
+							if (folderName && parentFolder) {
+								// 处理路径，确保正确
+								let folderPath = parentFolder.path;
+								if (folderPath === '/') {
+									folderPath = folderName;
+								} else {
+									folderPath = `${parentFolder.path}/${folderName}`;
+								}
+
+								console.log('创建文件夹路径:', folderPath);
+
+								try {
+									await this.app.vault.createFolder(folderPath);
+									console.log('文件夹创建成功:', folderPath);
+
+									// 展开父文件夹以显示新创建的文件夹
+									state.expandedFolders.add(parentFolder.path);
+									// 重新构建树
+									this.buildFolderTree(leafId);
+								} catch (error) {
+									console.error('创建文件夹失败:', error);
+								}
+							}
+						}).open();
+					});
+
+					// 删除文件菜单项
+					const deleteItem = menu.createDiv('context-menu-item');
+					deleteItem.textContent = 'Delete File';
+					deleteItem.style.color = 'var(--text-error)';
+					deleteItem.addEventListener('click', async (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						// 创建确认对话框
+						const confirmModal = new Modal(this.app);
+						confirmModal.titleEl.setText('Confirm Delete');
+						confirmModal.contentEl.createEl('p', {
+							text: `Are you sure you want to delete file "${child.name}"? This action cannot be undone.`
+						});
+
+						const buttonContainer = confirmModal.contentEl.createDiv();
+						buttonContainer.style.display = 'flex';
+						buttonContainer.style.justifyContent = 'flex-end';
+						buttonContainer.style.gap = '10px';
+						buttonContainer.style.marginTop = '20px';
+
+						const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+						cancelBtn.addEventListener('click', () => {
+							confirmModal.close();
+						});
+
+						const deleteBtn = buttonContainer.createEl('button', { text: 'Delete', cls: 'mod-warning' });
+						deleteBtn.addEventListener('click', async () => {
+							confirmModal.close();
+							try {
+								await this.app.vault.delete(child);
+								console.log('文件删除成功:', child.path);
+								// 重新构建树
+								this.buildFolderTree(leafId);
+							} catch (error) {
+								console.error('删除文件失败:', error);
+							}
+						});
+
+						confirmModal.open();
+					});
+
+					// 点击外部或面板内其他地方关闭菜单
+					const closeMenu = (event: MouseEvent) => {
+						// 检查点击是否在菜单外部
+						if (!menu.contains(event.target as Node)) {
+							menu.remove();
+							document.removeEventListener('click', closeMenu);
+							state.folderPanel.removeEventListener('click', closeMenu);
+						}
+					};
+
+					// 延迟添加事件监听器，避免立即触发
+					setTimeout(() => {
+						document.addEventListener('click', closeMenu);
+						state.folderPanel.addEventListener('click', closeMenu);
+					}, 10);
+
+					state.folderPanel.appendChild(menu);
 				});
 			}
 		});
