@@ -1,6 +1,6 @@
 {
 	"name": "floating-folder-explorer",
-	"version": "1.0.0",
+	"version": "1.2.2",
 	"description": "A floating folder explorer for Obsidian",
 	"main": "main.js",
 	"scripts": {
