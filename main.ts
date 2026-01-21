@@ -37,7 +37,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'New File',
 		'newFolderTitle': 'New Folder',
 		'untitled': 'Untitled.md',
-		'newFolderName': 'New Folder'
+		'newFolderName': 'New Folder',
+		'openInNewTab': 'Open in New Tab'
 	},
 	'zh-cn': {
 		'newFile': '新建文件 (⌘ N)',
@@ -55,7 +56,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': '新建文件',
 		'newFolderTitle': '新建文件夹',
 		'untitled': '未命名.md',
-		'newFolderName': '新文件夹'
+		'newFolderName': '新文件夹',
+		'openInNewTab': '在新标签页打开'
 	},
 	'zh-tw': {
 		'newFile': '新建檔案 (⌘ N)',
@@ -73,7 +75,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': '新建檔案',
 		'newFolderTitle': '新建資料夾',
 		'untitled': '未命名.md',
-		'newFolderName': '新資料夾'
+		'newFolderName': '新資料夾',
+		'openInNewTab': '在新標籤頁開啟'
 	},
 	'ar': {
 		'newFile': 'ملف جديد (⌘ N)',
@@ -91,7 +94,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'ملف جديد',
 		'newFolderTitle': 'مجلد جديد',
 		'untitled': 'بدون عنوان.md',
-		'newFolderName': 'مجلد جديد'
+		'newFolderName': 'مجلد جديد',
+		'openInNewTab': 'فتح في علامة تبويب جديدة'
 	},
 	'be': {
 		'newFile': 'Новы файл (⌘ N)',
@@ -109,7 +113,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Новы файл',
 		'newFolderTitle': 'Новая папка',
 		'untitled': 'Без назвы.md',
-		'newFolderName': 'Новая папка'
+		'newFolderName': 'Новая папка',
+		'openInNewTab': 'Адкрыць у новай укладцы'
 	},
 	'ca': {
 		'newFile': 'Fitxer nou (⌘ N)',
@@ -127,7 +132,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Fitxer nou',
 		'newFolderTitle': 'Carpeta nova',
 		'untitled': 'Sense títol.md',
-		'newFolderName': 'Carpeta nova'
+		'newFolderName': 'Carpeta nova',
+		'openInNewTab': 'Obrir en una pestanya nova'
 	},
 	'cs': {
 		'newFile': 'Nový soubor (⌘ N)',
@@ -145,7 +151,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Nový soubor',
 		'newFolderTitle': 'Nová složka',
 		'untitled': 'Bez názvu.md',
-		'newFolderName': 'Nová složka'
+		'newFolderName': 'Nová složka',
+		'openInNewTab': 'Otevřít v nové kartě'
 	},
 	'da': {
 		'newFile': 'Ny fil (⌘ N)',
@@ -163,7 +170,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Ny fil',
 		'newFolderTitle': 'Ny mappe',
 		'untitled': 'Unavngivet.md',
-		'newFolderName': 'Ny mappe'
+		'newFolderName': 'Ny mappe',
+		'openInNewTab': 'Åbn i ny fane'
 	},
 	'de': {
 		'newFile': 'Neue Datei (⌘ N)',
@@ -181,7 +189,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Neue Datei',
 		'newFolderTitle': 'Neuer Ordner',
 		'untitled': 'Unbenannt.md',
-		'newFolderName': 'Neuer Ordner'
+		'newFolderName': 'Neuer Ordner',
+		'openInNewTab': 'In neuem Tab öffnen'
 	},
 	'es': {
 		'newFile': 'Archivo nuevo (⌘ N)',
@@ -199,7 +208,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Archivo nuevo',
 		'newFolderTitle': 'Carpeta nueva',
 		'untitled': 'Sin título.md',
-		'newFolderName': 'Carpeta nueva'
+		'newFolderName': 'Carpeta nueva',
+		'openInNewTab': 'Abrir en nueva pestaña'
 	},
 	'fa': {
 		'newFile': 'فایل جدید (⌘ N)',
@@ -217,7 +227,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'فایل جدید',
 		'newFolderTitle': 'پوشه جدید',
 		'untitled': 'بدون عنوان.md',
-		'newFolderName': 'پوشه جدید'
+		'newFolderName': 'پوشه جدید',
+		'openInNewTab': 'باز کردن در برگه جدید'
 	},
 	'fr': {
 		'newFile': 'Nouveau fichier (⌘ N)',
@@ -235,7 +246,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Nouveau fichier',
 		'newFolderTitle': 'Nouveau dossier',
 		'untitled': 'Sans titre.md',
-		'newFolderName': 'Nouveau dossier'
+		'newFolderName': 'Nouveau dossier',
+		'openInNewTab': 'Ouvrir dans un nouvel onglet'
 	},
 	'ga': {
 		'newFile': 'Comhad nua (⌘ N)',
@@ -253,7 +265,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Comhad nua',
 		'newFolderTitle': 'Fillteán nua',
 		'untitled': 'Gan teideal.md',
-		'newFolderName': 'Fillteán nua'
+		'newFolderName': 'Fillteán nua',
+		'openInNewTab': 'Oscail i gcluaisín nua'
 	},
 	'he': {
 		'newFile': 'קובץ חדש (⌘ N)',
@@ -271,7 +284,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'קובץ חדש',
 		'newFolderTitle': 'תיקייה חדשה',
 		'untitled': 'ללא שם.md',
-		'newFolderName': 'תיקייה חדשה'
+		'newFolderName': 'תיקייה חדשה',
+		'openInNewTab': 'פתח בכרטיסייה חדשה'
 	},
 	'hu': {
 		'newFile': 'Új fájl (⌘ N)',
@@ -289,7 +303,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Új fájl',
 		'newFolderTitle': 'Új mappa',
 		'untitled': 'Névtelen.md',
-		'newFolderName': 'Új mappa'
+		'newFolderName': 'Új mappa',
+		'openInNewTab': 'Megnyitás új lapon'
 	},
 	'id': {
 		'newFile': 'File baru (⌘ N)',
@@ -307,7 +322,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'File baru',
 		'newFolderTitle': 'Folder baru',
 		'untitled': 'Tanpa judul.md',
-		'newFolderName': 'Folder baru'
+		'newFolderName': 'Folder baru',
+		'openInNewTab': 'Buka di tab baru'
 	},
 	'it': {
 		'newFile': 'Nuovo file (⌘ N)',
@@ -325,7 +341,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Nuovo file',
 		'newFolderTitle': 'Nuova cartella',
 		'untitled': 'Senza titolo.md',
-		'newFolderName': 'Nuova cartella'
+		'newFolderName': 'Nuova cartella',
+		'openInNewTab': 'Apri in nuova scheda'
 	},
 	'ja': {
 		'newFile': '新規ファイル (⌘ N)',
@@ -343,7 +360,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': '新規ファイル',
 		'newFolderTitle': '新規フォルダ',
 		'untitled': '無題.md',
-		'newFolderName': '新規フォルダ'
+		'newFolderName': '新規フォルダ',
+		'openInNewTab': '新しいタブで開く'
 	},
 	'km': {
 		'newFile': 'ឯកសារថ្មី (⌘ N)',
@@ -361,7 +379,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'ឯកសារថ្មី',
 		'newFolderTitle': 'ថតថ្មី',
 		'untitled': 'គ្មានចំណងជើង.md',
-		'newFolderName': 'ថតថ្មី'
+		'newFolderName': 'ថតថ្មី',
+		'openInNewTab': 'បើកនៅក្នុងផ្ទាំងថ្មី'
 	},
 	'ko': {
 		'newFile': '새 파일 (⌘ N)',
@@ -379,7 +398,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': '새 파일',
 		'newFolderTitle': '새 폴더',
 		'untitled': '제목 없음.md',
-		'newFolderName': '새 폴더'
+		'newFolderName': '새 폴더',
+		'openInNewTab': '새 탭에서 열기'
 	},
 	'lv': {
 		'newFile': 'Jauns fails (⌘ N)',
@@ -397,7 +417,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Jauns fails',
 		'newFolderTitle': 'Jauna mape',
 		'untitled': 'Bez nosaukuma.md',
-		'newFolderName': 'Jauna mape'
+		'newFolderName': 'Jauna mape',
+		'openInNewTab': 'Atvērt jaunā cilnē'
 	},
 	'ms': {
 		'newFile': 'Fail baharu (⌘ N)',
@@ -415,7 +436,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Fail baharu',
 		'newFolderTitle': 'Folder baharu',
 		'untitled': 'Tanpa tajuk.md',
-		'newFolderName': 'Folder baharu'
+		'newFolderName': 'Folder baharu',
+		'openInNewTab': 'Buka dalam tab baharu'
 	},
 	'ne': {
 		'newFile': 'नयाँ फाइल (⌘ N)',
@@ -433,7 +455,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'नयाँ फाइल',
 		'newFolderTitle': 'नयाँ फोल्डर',
 		'untitled': 'शीर्षकविहीन.md',
-		'newFolderName': 'नयाँ फोल्डर'
+		'newFolderName': 'नयाँ फोल्डर',
+		'openInNewTab': 'नयाँ ट्याबमा खोल्नुहोस्'
 	},
 	'nl': {
 		'newFile': 'Nieuw bestand (⌘ N)',
@@ -451,7 +474,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Nieuw bestand',
 		'newFolderTitle': 'Nieuwe map',
 		'untitled': 'Naamloos.md',
-		'newFolderName': 'Nieuwe map'
+		'newFolderName': 'Nieuwe map',
+		'openInNewTab': 'Openen in nieuw tabblad'
 	},
 	'no': {
 		'newFile': 'Ny fil (⌘ N)',
@@ -469,7 +493,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Ny fil',
 		'newFolderTitle': 'Ny mappe',
 		'untitled': 'Uten tittel.md',
-		'newFolderName': 'Ny mappe'
+		'newFolderName': 'Ny mappe',
+		'openInNewTab': 'Åpne i ny fane'
 	},
 	'pl': {
 		'newFile': 'Nowy plik (⌘ N)',
@@ -487,7 +512,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Nowy plik',
 		'newFolderTitle': 'Nowy folder',
 		'untitled': 'Bez tytułu.md',
-		'newFolderName': 'Nowy folder'
+		'newFolderName': 'Nowy folder',
+		'openInNewTab': 'Otwórz w nowej karcie'
 	},
 	'pt': {
 		'newFile': 'Novo arquivo (⌘ N)',
@@ -505,7 +531,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Novo arquivo',
 		'newFolderTitle': 'Nova pasta',
 		'untitled': 'Sem título.md',
-		'newFolderName': 'Nova pasta'
+		'newFolderName': 'Nova pasta',
+		'openInNewTab': 'Abrir em nova aba'
 	},
 	'pt-br': {
 		'newFile': 'Novo arquivo (⌘ N)',
@@ -523,7 +550,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Novo arquivo',
 		'newFolderTitle': 'Nova pasta',
 		'untitled': 'Sem título.md',
-		'newFolderName': 'Nova pasta'
+		'newFolderName': 'Nova pasta',
+		'openInNewTab': 'Abrir em nova aba'
 	},
 	'ro': {
 		'newFile': 'Fișier nou (⌘ N)',
@@ -541,7 +569,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Fișier nou',
 		'newFolderTitle': 'Dosar nou',
 		'untitled': 'Fără titlu.md',
-		'newFolderName': 'Dosar nou'
+		'newFolderName': 'Dosar nou',
+		'openInNewTab': 'Deschide în filă nouă'
 	},
 	'ru': {
 		'newFile': 'Новый файл (⌘ N)',
@@ -559,7 +588,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Новый файл',
 		'newFolderTitle': 'Новая папка',
 		'untitled': 'Без названия.md',
-		'newFolderName': 'Новая папка'
+		'newFolderName': 'Новая папка',
+		'openInNewTab': 'Открыть в новой вкладке'
 	},
 	'sq': {
 		'newFile': 'Skedar i ri (⌘ N)',
@@ -577,7 +607,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Skedar i ri',
 		'newFolderTitle': 'Dosje e re',
 		'untitled': 'Pa titull.md',
-		'newFolderName': 'Dosje e re'
+		'newFolderName': 'Dosje e re',
+		'openInNewTab': 'Hap në skedë të re'
 	},
 	'th': {
 		'newFile': 'ไฟล์ใหม่ (⌘ N)',
@@ -595,7 +626,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'ไฟล์ใหม่',
 		'newFolderTitle': 'โฟลเดอร์ใหม่',
 		'untitled': 'ไม่มีชื่อ.md',
-		'newFolderName': 'โฟลเดอร์ใหม่'
+		'newFolderName': 'โฟลเดอร์ใหม่',
+		'openInNewTab': 'เปิดในแท็บใหม่'
 	},
 	'tr': {
 		'newFile': 'Yeni dosya (⌘ N)',
@@ -613,7 +645,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Yeni dosya',
 		'newFolderTitle': 'Yeni klasör',
 		'untitled': 'Başlıksız.md',
-		'newFolderName': 'Yeni klasör'
+		'newFolderName': 'Yeni klasör',
+		'openInNewTab': 'Yeni sekmede aç'
 	},
 	'uk': {
 		'newFile': 'Новий файл (⌘ N)',
@@ -631,7 +664,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Новий файл',
 		'newFolderTitle': 'Нова папка',
 		'untitled': 'Без назви.md',
-		'newFolderName': 'Нова папка'
+		'newFolderName': 'Нова папка',
+		'openInNewTab': 'Відкрити в новій вкладці'
 	},
 	'uz': {
 		'newFile': 'Yangi fayl (⌘ N)',
@@ -649,7 +683,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Yangi fayl',
 		'newFolderTitle': 'Yangi papka',
 		'untitled': 'Nomsiz.md',
-		'newFolderName': 'Yangi papka'
+		'newFolderName': 'Yangi papka',
+		'openInNewTab': 'Yangi tabda ochish'
 	},
 	'vi': {
 		'newFile': 'Tệp mới (⌘ N)',
@@ -667,7 +702,8 @@ const translations: Record<string, Record<string, string>> = {
 		'newFileTitle': 'Tệp mới',
 		'newFolderTitle': 'Thư mục mới',
 		'untitled': 'Không có tiêu đề.md',
-		'newFolderName': 'Thư mục mới'
+		'newFolderName': 'Thư mục mới',
+		'openInNewTab': 'Mở trong tab mới'
 	}
 };
 
@@ -1349,6 +1385,24 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 					// 获取文件所在的文件夹
 					const parentFolder = child.parent;
+
+					// 在新标签页打开菜单项
+					const openInNewTabItem = menu.createDiv('context-menu-item');
+					openInNewTabItem.textContent = t('openInNewTab', this.locale);
+					openInNewTabItem.addEventListener('click', async (clickEvent) => {
+						clickEvent.stopPropagation();
+						menu.remove();
+
+						// 使用 'tab' 参数在新标签页打开
+						const leaf = this.app.workspace.getLeaf('tab');
+						await leaf.openFile(child);
+
+						// 隐藏浮动面板
+						if (state.folderPanel) {
+							state.folderPanel.removeClass('is-visible');
+							state.folderPanel.addClass('is-hidden');
+						}
+					});
 
 					// 创建新文件菜单项
 					const newFileItem = menu.createDiv('context-menu-item');

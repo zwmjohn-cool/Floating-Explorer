@@ -40,7 +40,8 @@ var translations = {
     "newFileTitle": "New File",
     "newFolderTitle": "New Folder",
     "untitled": "Untitled.md",
-    "newFolderName": "New Folder"
+    "newFolderName": "New Folder",
+    "openInNewTab": "Open in New Tab"
   },
   "zh-cn": {
     "newFile": "\u65B0\u5EFA\u6587\u4EF6 (\u2318 N)",
@@ -58,7 +59,8 @@ var translations = {
     "newFileTitle": "\u65B0\u5EFA\u6587\u4EF6",
     "newFolderTitle": "\u65B0\u5EFA\u6587\u4EF6\u5939",
     "untitled": "\u672A\u547D\u540D.md",
-    "newFolderName": "\u65B0\u6587\u4EF6\u5939"
+    "newFolderName": "\u65B0\u6587\u4EF6\u5939",
+    "openInNewTab": "\u5728\u65B0\u6807\u7B7E\u9875\u6253\u5F00"
   },
   "zh-tw": {
     "newFile": "\u65B0\u5EFA\u6A94\u6848 (\u2318 N)",
@@ -76,7 +78,8 @@ var translations = {
     "newFileTitle": "\u65B0\u5EFA\u6A94\u6848",
     "newFolderTitle": "\u65B0\u5EFA\u8CC7\u6599\u593E",
     "untitled": "\u672A\u547D\u540D.md",
-    "newFolderName": "\u65B0\u8CC7\u6599\u593E"
+    "newFolderName": "\u65B0\u8CC7\u6599\u593E",
+    "openInNewTab": "\u5728\u65B0\u6A19\u7C64\u9801\u958B\u555F"
   },
   "ar": {
     "newFile": "\u0645\u0644\u0641 \u062C\u062F\u064A\u062F (\u2318 N)",
@@ -94,7 +97,8 @@ var translations = {
     "newFileTitle": "\u0645\u0644\u0641 \u062C\u062F\u064A\u062F",
     "newFolderTitle": "\u0645\u062C\u0644\u062F \u062C\u062F\u064A\u062F",
     "untitled": "\u0628\u062F\u0648\u0646 \u0639\u0646\u0648\u0627\u0646.md",
-    "newFolderName": "\u0645\u062C\u0644\u062F \u062C\u062F\u064A\u062F"
+    "newFolderName": "\u0645\u062C\u0644\u062F \u062C\u062F\u064A\u062F",
+    "openInNewTab": "\u0641\u062A\u062D \u0641\u064A \u0639\u0644\u0627\u0645\u0629 \u062A\u0628\u0648\u064A\u0628 \u062C\u062F\u064A\u062F\u0629"
   },
   "be": {
     "newFile": "\u041D\u043E\u0432\u044B \u0444\u0430\u0439\u043B (\u2318 N)",
@@ -112,7 +116,8 @@ var translations = {
     "newFileTitle": "\u041D\u043E\u0432\u044B \u0444\u0430\u0439\u043B",
     "newFolderTitle": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430",
     "untitled": "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u044B.md",
-    "newFolderName": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430"
+    "newFolderName": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430",
+    "openInNewTab": "\u0410\u0434\u043A\u0440\u044B\u0446\u044C \u0443 \u043D\u043E\u0432\u0430\u0439 \u0443\u043A\u043B\u0430\u0434\u0446\u044B"
   },
   "ca": {
     "newFile": "Fitxer nou (\u2318 N)",
@@ -130,7 +135,8 @@ var translations = {
     "newFileTitle": "Fitxer nou",
     "newFolderTitle": "Carpeta nova",
     "untitled": "Sense t\xEDtol.md",
-    "newFolderName": "Carpeta nova"
+    "newFolderName": "Carpeta nova",
+    "openInNewTab": "Obrir en una pestanya nova"
   },
   "cs": {
     "newFile": "Nov\xFD soubor (\u2318 N)",
@@ -148,7 +154,8 @@ var translations = {
     "newFileTitle": "Nov\xFD soubor",
     "newFolderTitle": "Nov\xE1 slo\u017Eka",
     "untitled": "Bez n\xE1zvu.md",
-    "newFolderName": "Nov\xE1 slo\u017Eka"
+    "newFolderName": "Nov\xE1 slo\u017Eka",
+    "openInNewTab": "Otev\u0159\xEDt v nov\xE9 kart\u011B"
   },
   "da": {
     "newFile": "Ny fil (\u2318 N)",
@@ -166,7 +173,8 @@ var translations = {
     "newFileTitle": "Ny fil",
     "newFolderTitle": "Ny mappe",
     "untitled": "Unavngivet.md",
-    "newFolderName": "Ny mappe"
+    "newFolderName": "Ny mappe",
+    "openInNewTab": "\xC5bn i ny fane"
   },
   "de": {
     "newFile": "Neue Datei (\u2318 N)",
@@ -184,7 +192,8 @@ var translations = {
     "newFileTitle": "Neue Datei",
     "newFolderTitle": "Neuer Ordner",
     "untitled": "Unbenannt.md",
-    "newFolderName": "Neuer Ordner"
+    "newFolderName": "Neuer Ordner",
+    "openInNewTab": "In neuem Tab \xF6ffnen"
   },
   "es": {
     "newFile": "Archivo nuevo (\u2318 N)",
@@ -202,7 +211,8 @@ var translations = {
     "newFileTitle": "Archivo nuevo",
     "newFolderTitle": "Carpeta nueva",
     "untitled": "Sin t\xEDtulo.md",
-    "newFolderName": "Carpeta nueva"
+    "newFolderName": "Carpeta nueva",
+    "openInNewTab": "Abrir en nueva pesta\xF1a"
   },
   "fa": {
     "newFile": "\u0641\u0627\u06CC\u0644 \u062C\u062F\u06CC\u062F (\u2318 N)",
@@ -220,7 +230,8 @@ var translations = {
     "newFileTitle": "\u0641\u0627\u06CC\u0644 \u062C\u062F\u06CC\u062F",
     "newFolderTitle": "\u067E\u0648\u0634\u0647 \u062C\u062F\u06CC\u062F",
     "untitled": "\u0628\u062F\u0648\u0646 \u0639\u0646\u0648\u0627\u0646.md",
-    "newFolderName": "\u067E\u0648\u0634\u0647 \u062C\u062F\u06CC\u062F"
+    "newFolderName": "\u067E\u0648\u0634\u0647 \u062C\u062F\u06CC\u062F",
+    "openInNewTab": "\u0628\u0627\u0632 \u06A9\u0631\u062F\u0646 \u062F\u0631 \u0628\u0631\u06AF\u0647 \u062C\u062F\u06CC\u062F"
   },
   "fr": {
     "newFile": "Nouveau fichier (\u2318 N)",
@@ -238,7 +249,8 @@ var translations = {
     "newFileTitle": "Nouveau fichier",
     "newFolderTitle": "Nouveau dossier",
     "untitled": "Sans titre.md",
-    "newFolderName": "Nouveau dossier"
+    "newFolderName": "Nouveau dossier",
+    "openInNewTab": "Ouvrir dans un nouvel onglet"
   },
   "ga": {
     "newFile": "Comhad nua (\u2318 N)",
@@ -256,7 +268,8 @@ var translations = {
     "newFileTitle": "Comhad nua",
     "newFolderTitle": "Fillte\xE1n nua",
     "untitled": "Gan teideal.md",
-    "newFolderName": "Fillte\xE1n nua"
+    "newFolderName": "Fillte\xE1n nua",
+    "openInNewTab": "Oscail i gcluais\xEDn nua"
   },
   "he": {
     "newFile": "\u05E7\u05D5\u05D1\u05E5 \u05D7\u05D3\u05E9 (\u2318 N)",
@@ -274,7 +287,8 @@ var translations = {
     "newFileTitle": "\u05E7\u05D5\u05D1\u05E5 \u05D7\u05D3\u05E9",
     "newFolderTitle": "\u05EA\u05D9\u05E7\u05D9\u05D9\u05D4 \u05D7\u05D3\u05E9\u05D4",
     "untitled": "\u05DC\u05DC\u05D0 \u05E9\u05DD.md",
-    "newFolderName": "\u05EA\u05D9\u05E7\u05D9\u05D9\u05D4 \u05D7\u05D3\u05E9\u05D4"
+    "newFolderName": "\u05EA\u05D9\u05E7\u05D9\u05D9\u05D4 \u05D7\u05D3\u05E9\u05D4",
+    "openInNewTab": "\u05E4\u05EA\u05D7 \u05D1\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05D9\u05D4 \u05D7\u05D3\u05E9\u05D4"
   },
   "hu": {
     "newFile": "\xDAj f\xE1jl (\u2318 N)",
@@ -292,7 +306,8 @@ var translations = {
     "newFileTitle": "\xDAj f\xE1jl",
     "newFolderTitle": "\xDAj mappa",
     "untitled": "N\xE9vtelen.md",
-    "newFolderName": "\xDAj mappa"
+    "newFolderName": "\xDAj mappa",
+    "openInNewTab": "Megnyit\xE1s \xFAj lapon"
   },
   "id": {
     "newFile": "File baru (\u2318 N)",
@@ -310,7 +325,8 @@ var translations = {
     "newFileTitle": "File baru",
     "newFolderTitle": "Folder baru",
     "untitled": "Tanpa judul.md",
-    "newFolderName": "Folder baru"
+    "newFolderName": "Folder baru",
+    "openInNewTab": "Buka di tab baru"
   },
   "it": {
     "newFile": "Nuovo file (\u2318 N)",
@@ -328,7 +344,8 @@ var translations = {
     "newFileTitle": "Nuovo file",
     "newFolderTitle": "Nuova cartella",
     "untitled": "Senza titolo.md",
-    "newFolderName": "Nuova cartella"
+    "newFolderName": "Nuova cartella",
+    "openInNewTab": "Apri in nuova scheda"
   },
   "ja": {
     "newFile": "\u65B0\u898F\u30D5\u30A1\u30A4\u30EB (\u2318 N)",
@@ -346,7 +363,8 @@ var translations = {
     "newFileTitle": "\u65B0\u898F\u30D5\u30A1\u30A4\u30EB",
     "newFolderTitle": "\u65B0\u898F\u30D5\u30A9\u30EB\u30C0",
     "untitled": "\u7121\u984C.md",
-    "newFolderName": "\u65B0\u898F\u30D5\u30A9\u30EB\u30C0"
+    "newFolderName": "\u65B0\u898F\u30D5\u30A9\u30EB\u30C0",
+    "openInNewTab": "\u65B0\u3057\u3044\u30BF\u30D6\u3067\u958B\u304F"
   },
   "km": {
     "newFile": "\u17AF\u1780\u179F\u17B6\u179A\u1790\u17D2\u1798\u17B8 (\u2318 N)",
@@ -364,7 +382,8 @@ var translations = {
     "newFileTitle": "\u17AF\u1780\u179F\u17B6\u179A\u1790\u17D2\u1798\u17B8",
     "newFolderTitle": "\u1790\u178F\u1790\u17D2\u1798\u17B8",
     "untitled": "\u1782\u17D2\u1798\u17B6\u1793\u1785\u17C6\u178E\u1784\u1787\u17BE\u1784.md",
-    "newFolderName": "\u1790\u178F\u1790\u17D2\u1798\u17B8"
+    "newFolderName": "\u1790\u178F\u1790\u17D2\u1798\u17B8",
+    "openInNewTab": "\u1794\u17BE\u1780\u1793\u17C5\u1780\u17D2\u1793\u17BB\u1784\u1795\u17D2\u1791\u17B6\u17C6\u1784\u1790\u17D2\u1798\u17B8"
   },
   "ko": {
     "newFile": "\uC0C8 \uD30C\uC77C (\u2318 N)",
@@ -382,7 +401,8 @@ var translations = {
     "newFileTitle": "\uC0C8 \uD30C\uC77C",
     "newFolderTitle": "\uC0C8 \uD3F4\uB354",
     "untitled": "\uC81C\uBAA9 \uC5C6\uC74C.md",
-    "newFolderName": "\uC0C8 \uD3F4\uB354"
+    "newFolderName": "\uC0C8 \uD3F4\uB354",
+    "openInNewTab": "\uC0C8 \uD0ED\uC5D0\uC11C \uC5F4\uAE30"
   },
   "lv": {
     "newFile": "Jauns fails (\u2318 N)",
@@ -400,7 +420,8 @@ var translations = {
     "newFileTitle": "Jauns fails",
     "newFolderTitle": "Jauna mape",
     "untitled": "Bez nosaukuma.md",
-    "newFolderName": "Jauna mape"
+    "newFolderName": "Jauna mape",
+    "openInNewTab": "Atv\u0113rt jaun\u0101 ciln\u0113"
   },
   "ms": {
     "newFile": "Fail baharu (\u2318 N)",
@@ -418,7 +439,8 @@ var translations = {
     "newFileTitle": "Fail baharu",
     "newFolderTitle": "Folder baharu",
     "untitled": "Tanpa tajuk.md",
-    "newFolderName": "Folder baharu"
+    "newFolderName": "Folder baharu",
+    "openInNewTab": "Buka dalam tab baharu"
   },
   "ne": {
     "newFile": "\u0928\u092F\u093E\u0901 \u092B\u093E\u0907\u0932 (\u2318 N)",
@@ -436,7 +458,8 @@ var translations = {
     "newFileTitle": "\u0928\u092F\u093E\u0901 \u092B\u093E\u0907\u0932",
     "newFolderTitle": "\u0928\u092F\u093E\u0901 \u092B\u094B\u0932\u094D\u0921\u0930",
     "untitled": "\u0936\u0940\u0930\u094D\u0937\u0915\u0935\u093F\u0939\u0940\u0928.md",
-    "newFolderName": "\u0928\u092F\u093E\u0901 \u092B\u094B\u0932\u094D\u0921\u0930"
+    "newFolderName": "\u0928\u092F\u093E\u0901 \u092B\u094B\u0932\u094D\u0921\u0930",
+    "openInNewTab": "\u0928\u092F\u093E\u0901 \u091F\u094D\u092F\u093E\u092C\u092E\u093E \u0916\u094B\u0932\u094D\u0928\u0941\u0939\u094B\u0938\u094D"
   },
   "nl": {
     "newFile": "Nieuw bestand (\u2318 N)",
@@ -454,7 +477,8 @@ var translations = {
     "newFileTitle": "Nieuw bestand",
     "newFolderTitle": "Nieuwe map",
     "untitled": "Naamloos.md",
-    "newFolderName": "Nieuwe map"
+    "newFolderName": "Nieuwe map",
+    "openInNewTab": "Openen in nieuw tabblad"
   },
   "no": {
     "newFile": "Ny fil (\u2318 N)",
@@ -472,7 +496,8 @@ var translations = {
     "newFileTitle": "Ny fil",
     "newFolderTitle": "Ny mappe",
     "untitled": "Uten tittel.md",
-    "newFolderName": "Ny mappe"
+    "newFolderName": "Ny mappe",
+    "openInNewTab": "\xC5pne i ny fane"
   },
   "pl": {
     "newFile": "Nowy plik (\u2318 N)",
@@ -490,7 +515,8 @@ var translations = {
     "newFileTitle": "Nowy plik",
     "newFolderTitle": "Nowy folder",
     "untitled": "Bez tytu\u0142u.md",
-    "newFolderName": "Nowy folder"
+    "newFolderName": "Nowy folder",
+    "openInNewTab": "Otw\xF3rz w nowej karcie"
   },
   "pt": {
     "newFile": "Novo arquivo (\u2318 N)",
@@ -508,7 +534,8 @@ var translations = {
     "newFileTitle": "Novo arquivo",
     "newFolderTitle": "Nova pasta",
     "untitled": "Sem t\xEDtulo.md",
-    "newFolderName": "Nova pasta"
+    "newFolderName": "Nova pasta",
+    "openInNewTab": "Abrir em nova aba"
   },
   "pt-br": {
     "newFile": "Novo arquivo (\u2318 N)",
@@ -526,7 +553,8 @@ var translations = {
     "newFileTitle": "Novo arquivo",
     "newFolderTitle": "Nova pasta",
     "untitled": "Sem t\xEDtulo.md",
-    "newFolderName": "Nova pasta"
+    "newFolderName": "Nova pasta",
+    "openInNewTab": "Abrir em nova aba"
   },
   "ro": {
     "newFile": "Fi\u0219ier nou (\u2318 N)",
@@ -544,7 +572,8 @@ var translations = {
     "newFileTitle": "Fi\u0219ier nou",
     "newFolderTitle": "Dosar nou",
     "untitled": "F\u0103r\u0103 titlu.md",
-    "newFolderName": "Dosar nou"
+    "newFolderName": "Dosar nou",
+    "openInNewTab": "Deschide \xEEn fil\u0103 nou\u0103"
   },
   "ru": {
     "newFile": "\u041D\u043E\u0432\u044B\u0439 \u0444\u0430\u0439\u043B (\u2318 N)",
@@ -562,7 +591,8 @@ var translations = {
     "newFileTitle": "\u041D\u043E\u0432\u044B\u0439 \u0444\u0430\u0439\u043B",
     "newFolderTitle": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430",
     "untitled": "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F.md",
-    "newFolderName": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430"
+    "newFolderName": "\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430",
+    "openInNewTab": "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0432 \u043D\u043E\u0432\u043E\u0439 \u0432\u043A\u043B\u0430\u0434\u043A\u0435"
   },
   "sq": {
     "newFile": "Skedar i ri (\u2318 N)",
@@ -580,7 +610,8 @@ var translations = {
     "newFileTitle": "Skedar i ri",
     "newFolderTitle": "Dosje e re",
     "untitled": "Pa titull.md",
-    "newFolderName": "Dosje e re"
+    "newFolderName": "Dosje e re",
+    "openInNewTab": "Hap n\xEB sked\xEB t\xEB re"
   },
   "th": {
     "newFile": "\u0E44\u0E1F\u0E25\u0E4C\u0E43\u0E2B\u0E21\u0E48 (\u2318 N)",
@@ -598,7 +629,8 @@ var translations = {
     "newFileTitle": "\u0E44\u0E1F\u0E25\u0E4C\u0E43\u0E2B\u0E21\u0E48",
     "newFolderTitle": "\u0E42\u0E1F\u0E25\u0E40\u0E14\u0E2D\u0E23\u0E4C\u0E43\u0E2B\u0E21\u0E48",
     "untitled": "\u0E44\u0E21\u0E48\u0E21\u0E35\u0E0A\u0E37\u0E48\u0E2D.md",
-    "newFolderName": "\u0E42\u0E1F\u0E25\u0E40\u0E14\u0E2D\u0E23\u0E4C\u0E43\u0E2B\u0E21\u0E48"
+    "newFolderName": "\u0E42\u0E1F\u0E25\u0E40\u0E14\u0E2D\u0E23\u0E4C\u0E43\u0E2B\u0E21\u0E48",
+    "openInNewTab": "\u0E40\u0E1B\u0E34\u0E14\u0E43\u0E19\u0E41\u0E17\u0E47\u0E1A\u0E43\u0E2B\u0E21\u0E48"
   },
   "tr": {
     "newFile": "Yeni dosya (\u2318 N)",
@@ -616,7 +648,8 @@ var translations = {
     "newFileTitle": "Yeni dosya",
     "newFolderTitle": "Yeni klas\xF6r",
     "untitled": "Ba\u015Fl\u0131ks\u0131z.md",
-    "newFolderName": "Yeni klas\xF6r"
+    "newFolderName": "Yeni klas\xF6r",
+    "openInNewTab": "Yeni sekmede a\xE7"
   },
   "uk": {
     "newFile": "\u041D\u043E\u0432\u0438\u0439 \u0444\u0430\u0439\u043B (\u2318 N)",
@@ -634,7 +667,8 @@ var translations = {
     "newFileTitle": "\u041D\u043E\u0432\u0438\u0439 \u0444\u0430\u0439\u043B",
     "newFolderTitle": "\u041D\u043E\u0432\u0430 \u043F\u0430\u043F\u043A\u0430",
     "untitled": "\u0411\u0435\u0437 \u043D\u0430\u0437\u0432\u0438.md",
-    "newFolderName": "\u041D\u043E\u0432\u0430 \u043F\u0430\u043F\u043A\u0430"
+    "newFolderName": "\u041D\u043E\u0432\u0430 \u043F\u0430\u043F\u043A\u0430",
+    "openInNewTab": "\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u0432 \u043D\u043E\u0432\u0456\u0439 \u0432\u043A\u043B\u0430\u0434\u0446\u0456"
   },
   "uz": {
     "newFile": "Yangi fayl (\u2318 N)",
@@ -652,7 +686,8 @@ var translations = {
     "newFileTitle": "Yangi fayl",
     "newFolderTitle": "Yangi papka",
     "untitled": "Nomsiz.md",
-    "newFolderName": "Yangi papka"
+    "newFolderName": "Yangi papka",
+    "openInNewTab": "Yangi tabda ochish"
   },
   "vi": {
     "newFile": "T\u1EC7p m\u1EDBi (\u2318 N)",
@@ -670,7 +705,8 @@ var translations = {
     "newFileTitle": "T\u1EC7p m\u1EDBi",
     "newFolderTitle": "Th\u01B0 m\u1EE5c m\u1EDBi",
     "untitled": "Kh\xF4ng c\xF3 ti\xEAu \u0111\u1EC1.md",
-    "newFolderName": "Th\u01B0 m\u1EE5c m\u1EDBi"
+    "newFolderName": "Th\u01B0 m\u1EE5c m\u1EDBi",
+    "openInNewTab": "M\u1EDF trong tab m\u1EDBi"
   }
 };
 function t(key, locale = "en") {
@@ -1171,6 +1207,18 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             top: relativeY + "px"
           });
           const parentFolder = child.parent;
+          const openInNewTabItem = menu.createDiv("context-menu-item");
+          openInNewTabItem.textContent = t("openInNewTab", this.locale);
+          openInNewTabItem.addEventListener("click", async (clickEvent) => {
+            clickEvent.stopPropagation();
+            menu.remove();
+            const leaf = this.app.workspace.getLeaf("tab");
+            await leaf.openFile(child);
+            if (state.folderPanel) {
+              state.folderPanel.removeClass("is-visible");
+              state.folderPanel.addClass("is-hidden");
+            }
+          });
           const newFileItem = menu.createDiv("context-menu-item");
           newFileItem.textContent = t("newFile", this.locale);
           newFileItem.addEventListener("click", (clickEvent) => {
