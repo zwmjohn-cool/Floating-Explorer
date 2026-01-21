@@ -1103,10 +1103,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               confirmModal.close();
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
-            deleteBtn.addEventListener("click", () => {
+            deleteBtn.addEventListener("click", async () => {
               confirmModal.close();
               try {
-                this.app.fileManager.trashFile(child);
+                await this.app.fileManager.trashFile(child);
                 this.buildFolderTree(leafId);
               } catch (error) {
                 console.error("\u5220\u9664\u6587\u4EF6\u5939\u5931\u8D25:", error);
@@ -1149,9 +1149,9 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
         this.createFileSvgIcon(fileIcon);
         const fileName = fileItem.createSpan("file-name");
         fileName.textContent = child.name;
-        fileItem.addEventListener("click", () => {
+        fileItem.addEventListener("click", async () => {
           const leaf = this.app.workspace.getLeaf();
-          leaf.openFile(child);
+          await leaf.openFile(child);
           if (state.folderPanel) {
             state.folderPanel.removeClass("is-visible");
             state.folderPanel.addClass("is-hidden");
@@ -1237,10 +1237,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               confirmModal.close();
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
-            deleteBtn.addEventListener("click", () => {
+            deleteBtn.addEventListener("click", async () => {
               confirmModal.close();
               try {
-                this.app.fileManager.trashFile(child);
+                await this.app.fileManager.trashFile(child);
                 this.buildFolderTree(leafId);
               } catch (error) {
                 console.error("\u5220\u9664\u6587\u4EF6\u5931\u8D25:", error);
