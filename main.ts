@@ -810,7 +810,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 		});
 	}
 
-	async onload() {
+	onload() {
 		console.debug('Loading Floating Explorer Plugin');
 
 		// 获取 Obsidian 的语言设置
@@ -1228,7 +1228,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					const deleteItem = menu.createDiv('context-menu-item');
 					deleteItem.textContent = t('deleteFolder', this.locale);
 					deleteItem.addClass('context-menu-item-delete');
-					deleteItem.addEventListener('click', async (clickEvent) => {
+					deleteItem.addEventListener('click', (clickEvent) => {
 						clickEvent.stopPropagation();
 						menu.remove();
 
@@ -1248,10 +1248,10 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
-						deleteBtn.addEventListener('click', async () => {
+						deleteBtn.addEventListener('click', () => {
 							confirmModal.close();
 							try {
-								await this.app.fileManager.trashFile(child);
+								this.app.fileManager.trashFile(child);
 								// 重新构建树
 								this.buildFolderTree(leafId);
 							} catch (error) {
@@ -1317,9 +1317,9 @@ export default class FloatingExplorerPlugin extends Plugin {
 				fileName.textContent = child.name;
 
 				// 点击打开文件
-				fileItem.addEventListener('click', async () => {
+				fileItem.addEventListener('click', () => {
 					const leaf = this.app.workspace.getLeaf();
-					await leaf.openFile(child);
+					leaf.openFile(child);
 					if (state.folderPanel) {
 						state.folderPanel.removeClass('is-visible'); state.folderPanel.addClass('is-hidden');
 					}
@@ -1422,7 +1422,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					const deleteItem = menu.createDiv('context-menu-item');
 					deleteItem.textContent = t('deleteFile', this.locale);
 					deleteItem.addClass('context-menu-item-delete');
-					deleteItem.addEventListener('click', async (clickEvent) => {
+					deleteItem.addEventListener('click', (clickEvent) => {
 						clickEvent.stopPropagation();
 						menu.remove();
 
@@ -1442,10 +1442,10 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
-						deleteBtn.addEventListener('click', async () => {
+						deleteBtn.addEventListener('click', () => {
 							confirmModal.close();
 							try {
-								await this.app.fileManager.trashFile(child);
+								this.app.fileManager.trashFile(child);
 								// 重新构建树
 								this.buildFolderTree(leafId);
 							} catch (error) {
