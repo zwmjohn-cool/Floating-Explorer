@@ -1198,7 +1198,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						clickEvent.stopPropagation();
 						menu.remove();
 
-						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), async (fileName) => {
+						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
+							void (async () => {
 							if (fileName) {
 								// 处理路径，确保正确
 								let filePath = child.path;
@@ -1225,6 +1226,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									new Modal(this.app).open();
 								}
 							}
+							})();
 						}).open();
 					});
 
@@ -1235,7 +1237,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						clickEvent.stopPropagation();
 						menu.remove();
 
-						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), async (folderName) => {
+						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
+							void (async () => {
 							if (folderName) {
 								// 处理路径，确保正确
 								let folderPath = child.path;
@@ -1257,6 +1260,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件夹失败:', error);
 								}
 							}
+							})();
 						}).open();
 					});
 
@@ -1353,13 +1357,15 @@ export default class FloatingExplorerPlugin extends Plugin {
 				fileName.textContent = child.name;
 
 				// 点击打开文件
-				fileItem.addEventListener('click', async () => {
+				fileItem.addEventListener('click', () => {
+					void (async () => {
 					const leaf = this.app.workspace.getLeaf();
 					await leaf.openFile(child);
 					if (state.folderPanel) {
 						state.folderPanel.removeClass('is-visible'); state.folderPanel.addClass('is-hidden');
 					}
-				});
+				})();
+		});
 
 				// 文件右键菜单
 				fileItem.addEventListener('contextmenu', (e) => {
@@ -1389,7 +1395,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 					// 在新标签页打开菜单项
 					const openInNewTabItem = menu.createDiv('context-menu-item');
 					openInNewTabItem.textContent = t('openInNewTab', this.locale);
-					openInNewTabItem.addEventListener('click', async (clickEvent) => {
+					openInNewTabItem.addEventListener('click', (clickEvent) => {
+						void (async () => {
 						clickEvent.stopPropagation();
 						menu.remove();
 
@@ -1402,6 +1409,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 							state.folderPanel.removeClass('is-visible');
 							state.folderPanel.addClass('is-hidden');
 						}
+						})();
 					});
 
 					// 创建新文件菜单项
@@ -1411,7 +1419,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						clickEvent.stopPropagation();
 						menu.remove();
 
-						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), async (fileName) => {
+						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
+							void (async () => {
 							if (fileName && parentFolder) {
 								// 处理路径，确保正确
 								let filePath = parentFolder.path;
@@ -1437,6 +1446,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件失败:', error);
 								}
 							}
+						})();
 						}).open();
 					});
 
@@ -1447,7 +1457,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						clickEvent.stopPropagation();
 						menu.remove();
 
-						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), async (folderName) => {
+						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
+							void (async () => {
 							if (folderName && parentFolder) {
 								// 处理路径，确保正确
 								let folderPath = parentFolder.path;
@@ -1469,6 +1480,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件夹失败:', error);
 								}
 							}
+						})();
 						}).open();
 					});
 
