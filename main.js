@@ -703,8 +703,7 @@ var InputModal = class extends import_obsidian.Modal {
       placeholder: this.placeholder,
       value: this.placeholder
     });
-    inputEl.style.width = "100%";
-    inputEl.style.marginBottom = "10px";
+    inputEl.addClass("floating-modal-input");
     inputEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         this.result = inputEl.value;
@@ -713,9 +712,7 @@ var InputModal = class extends import_obsidian.Modal {
       }
     });
     const buttonContainer = contentEl.createDiv();
-    buttonContainer.style.display = "flex";
-    buttonContainer.style.justifyContent = "flex-end";
-    buttonContainer.style.gap = "10px";
+    buttonContainer.addClass("floating-button-container");
     const cancelBtn = buttonContainer.createEl("button", { text: t("cancel", this.locale) });
     cancelBtn.addEventListener("click", () => {
       this.close();
@@ -740,17 +737,57 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     this.leafStates = /* @__PURE__ */ new Map();
     this.locale = "en";
   }
+  // SVG helper functions
+  createFolderSvgIcon(container, width = "16", height = "16") {
+    const svg = container.createSvg("svg", {
+      attr: {
+        xmlns: "http://www.w3.org/2000/svg",
+        width,
+        height,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      }
+    });
+    svg.createSvg("path", {
+      attr: {
+        d: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+      }
+    });
+  }
+  createFileSvgIcon(container) {
+    const svg = container.createSvg("svg", {
+      attr: {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "16",
+        height: "16",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2"
+      }
+    });
+    svg.createSvg("path", {
+      attr: {
+        d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+      }
+    });
+    svg.createSvg("polyline", {
+      attr: {
+        points: "14 2 14 8 20 8"
+      }
+    });
+  }
   async onload() {
     var _a;
-    console.log("Loading Floating Explorer Plugin");
+    console.debug("Loading Floating Explorer Plugin");
     const vaultLang = this.app.vault.getConfig("language");
-    const localStorageLang = localStorage.getItem("language");
+    const localStorageLang = this.app.loadLocalStorage("language");
     const momentLang = (_a = window.moment) == null ? void 0 : _a.locale();
-    console.log("vault.getConfig language:", vaultLang);
-    console.log("localStorage language:", localStorageLang);
-    console.log("moment.locale:", momentLang);
     this.locale = vaultLang || localStorageLang || momentLang || "en";
-    console.log("Final detected locale:", this.locale);
     this.app.workspace.onLayoutReady(() => {
       this.initializeAllLeaves();
     });
@@ -769,7 +806,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     );
   }
   onunload() {
-    console.log("Unloading Floating Explorer Plugin");
+    console.debug("Unloading Floating Explorer Plugin");
     this.removeAllIcons();
   }
   getLeafId(leaf) {
@@ -833,14 +870,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     }
     const floatingIcon = document.createElement("div");
     floatingIcon.addClass("floating-explorer-icon");
-    floatingIcon.innerHTML = `
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-			</svg>
-		`;
+    this.createFolderSvgIcon(floatingIcon, "20", "20");
     const folderPanel = document.createElement("div");
     folderPanel.addClass("floating-folder-panel");
-    folderPanel.style.display = "none";
+    folderPanel.addClass("is-hidden");
     const leafContainer = leaf.containerEl;
     leafContainer.appendChild(floatingIcon);
     leafContainer.appendChild(folderPanel);
@@ -892,7 +925,8 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
       return;
     this.cancelHidePanel(leafId);
     this.buildFolderTree(leafId);
-    state.folderPanel.style.display = "block";
+    state.folderPanel.removeClass("is-hidden");
+    state.folderPanel.addClass("is-visible");
   }
   scheduleHidePanel(leafId) {
     const state = this.leafStates.get(leafId);
@@ -900,7 +934,8 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
       return;
     state.hideTimeout = setTimeout(() => {
       if (state.folderPanel) {
-        state.folderPanel.style.display = "none";
+        state.folderPanel.removeClass("is-visible");
+        state.folderPanel.addClass("is-hidden");
       }
     }, 300);
   }
@@ -933,10 +968,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     const treeContainer = state.folderPanel.createDiv("folder-tree-container");
     if (state.focusedFolder) {
       const unfocusBar = treeContainer.createDiv("unfocus-bar");
-      unfocusBar.innerHTML = `
-				<span class="unfocus-icon">\u25C0</span>
-				<span class="unfocus-text">Focused: ${startFolder.name}</span>
-			`;
+      const iconSpan = unfocusBar.createSpan({ cls: "unfocus-icon" });
+      iconSpan.textContent = "\u25C0";
+      const textSpan = unfocusBar.createSpan({ cls: "unfocus-text" });
+      textSpan.textContent = `Focused: ${startFolder.name}`;
       unfocusBar.addEventListener("click", () => {
         state.focusedFolder = null;
         this.buildFolderTree(leafId);
@@ -958,21 +993,21 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     children.forEach((child) => {
       if (child instanceof import_obsidian.TFolder) {
         const folderItem = container.createDiv("folder-item");
-        folderItem.style.paddingLeft = `${level * 16}px`;
+        folderItem.setCssStyles({ "padding-left": level * 16 + "px" });
         const folderHeader = folderItem.createDiv("folder-header");
         const toggleIcon = folderHeader.createSpan("folder-toggle");
         const isExpanded = state.expandedFolders.has(child.path);
-        toggleIcon.innerHTML = isExpanded ? "\u25BC" : "\u25B6";
+        toggleIcon.textContent = isExpanded ? "\u25BC" : "\u25B6";
         const folderIcon = folderHeader.createSpan("folder-icon");
-        folderIcon.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-					</svg>
-				`;
+        this.createFolderSvgIcon(folderIcon);
         const folderName = folderHeader.createSpan("folder-name");
         folderName.textContent = child.name;
         const childContainer = folderItem.createDiv("folder-children");
-        childContainer.style.display = isExpanded ? "block" : "none";
+        if (isExpanded) {
+          childContainer.addClass("is-expanded");
+        } else {
+          childContainer.addClass("is-collapsed");
+        }
         this.renderFolder(child, childContainer, level + 1, leafId);
         folderHeader.addEventListener("click", (e) => {
           if (e.button !== 0)
@@ -980,12 +1015,14 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           const nowExpanded = state.expandedFolders.has(child.path);
           if (nowExpanded) {
             state.expandedFolders.delete(child.path);
-            childContainer.style.display = "none";
-            toggleIcon.innerHTML = "\u25B6";
+            childContainer.removeClass("is-expanded");
+            childContainer.addClass("is-collapsed");
+            toggleIcon.textContent = "\u25B6";
           } else {
             state.expandedFolders.add(child.path);
-            childContainer.style.display = "block";
-            toggleIcon.innerHTML = "\u25BC";
+            childContainer.removeClass("is-collapsed");
+            childContainer.addClass("is-expanded");
+            toggleIcon.textContent = "\u25BC";
           }
         });
         folderHeader.addEventListener("contextmenu", (e) => {
@@ -994,12 +1031,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           state.folderPanel.querySelectorAll(".folder-context-menu").forEach((menu2) => menu2.remove());
           const menu = document.createElement("div");
           menu.addClass("folder-context-menu");
-          menu.style.position = "absolute";
           const panelRect = state.folderPanel.getBoundingClientRect();
           const relativeX = e.clientX - panelRect.left;
           const relativeY = e.clientY - panelRect.top;
-          menu.style.left = `${relativeX}px`;
-          menu.style.top = `${relativeY}px`;
+          menu.setCssStyles({ left: relativeX + "px", top: relativeY + "px" });
           const isFocused = state.focusedFolder === child.path;
           const newFileItem = menu.createDiv("context-menu-item");
           newFileItem.textContent = t("newFile", this.locale);
@@ -1012,12 +1047,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
                 if (filePath === "/") {
                   filePath = fileName;
                 } else {
-                  filePath = `${child.path}/${fileName}`;
+                  filePath = child.path + "/" + fileName;
                 }
-                console.log("\u521B\u5EFA\u6587\u4EF6\u8DEF\u5F84:", filePath);
                 try {
                   const newFile = await this.app.vault.create(filePath, "");
-                  console.log("\u6587\u4EF6\u521B\u5EFA\u6210\u529F:", newFile);
                   const leaf = this.app.workspace.getLeaf();
                   await leaf.openFile(newFile);
                   state.expandedFolders.add(child.path);
@@ -1040,12 +1073,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
                 if (folderPath === "/") {
                   folderPath = folderName2;
                 } else {
-                  folderPath = `${child.path}/${folderName2}`;
+                  folderPath = child.path + "/" + folderName2;
                 }
-                console.log("\u521B\u5EFA\u6587\u4EF6\u5939\u8DEF\u5F84:", folderPath);
                 try {
                   await this.app.vault.createFolder(folderPath);
-                  console.log("\u6587\u4EF6\u5939\u521B\u5EFA\u6210\u529F:", folderPath);
                   state.expandedFolders.add(child.path);
                   this.buildFolderTree(leafId);
                 } catch (error) {
@@ -1056,7 +1087,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           });
           const deleteItem = menu.createDiv("context-menu-item");
           deleteItem.textContent = t("deleteFolder", this.locale);
-          deleteItem.style.color = "var(--text-error)";
+          deleteItem.addClass("context-menu-item-delete");
           deleteItem.addEventListener("click", async (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
@@ -1066,10 +1097,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               text: t("deleteFolderConfirm", this.locale).replace("{name}", child.name)
             });
             const buttonContainer = confirmModal.contentEl.createDiv();
-            buttonContainer.style.display = "flex";
-            buttonContainer.style.justifyContent = "flex-end";
-            buttonContainer.style.gap = "10px";
-            buttonContainer.style.marginTop = "20px";
+            buttonContainer.addClass("floating-button-container-spaced");
             const cancelBtn = buttonContainer.createEl("button", { text: t("cancel", this.locale) });
             cancelBtn.addEventListener("click", () => {
               confirmModal.close();
@@ -1078,8 +1106,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             deleteBtn.addEventListener("click", async () => {
               confirmModal.close();
               try {
-                await this.app.vault.delete(child, true);
-                console.log("\u6587\u4EF6\u5939\u5220\u9664\u6210\u529F:", child.path);
+                await this.app.fileManager.trashFile(child);
                 this.buildFolderTree(leafId);
               } catch (error) {
                 console.error("\u5220\u9664\u6587\u4EF6\u5939\u5931\u8D25:", error);
@@ -1113,21 +1140,21 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
         });
       } else if (child instanceof import_obsidian.TFile) {
         const fileItem = container.createDiv("file-item");
-        fileItem.style.paddingLeft = `${(level + 1) * 16}px`;
+        fileItem.setCssStyles({ "padding-left": (level + 1) * 16 + "px" });
+        const activeFile = this.app.workspace.getActiveFile();
+        if (activeFile && activeFile.path === child.path) {
+          fileItem.addClass("is-active");
+        }
         const fileIcon = fileItem.createSpan("file-icon");
-        fileIcon.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-						<polyline points="14 2 14 8 20 8"></polyline>
-					</svg>
-				`;
+        this.createFileSvgIcon(fileIcon);
         const fileName = fileItem.createSpan("file-name");
         fileName.textContent = child.name;
         fileItem.addEventListener("click", async () => {
           const leaf = this.app.workspace.getLeaf();
           await leaf.openFile(child);
           if (state.folderPanel) {
-            state.folderPanel.style.display = "none";
+            state.folderPanel.removeClass("is-visible");
+            state.folderPanel.addClass("is-hidden");
           }
         });
         fileItem.addEventListener("contextmenu", (e) => {
@@ -1136,12 +1163,13 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           state.folderPanel.querySelectorAll(".folder-context-menu").forEach((menu2) => menu2.remove());
           const menu = document.createElement("div");
           menu.addClass("folder-context-menu");
-          menu.style.position = "absolute";
           const panelRect = state.folderPanel.getBoundingClientRect();
           const relativeX = e.clientX - panelRect.left;
           const relativeY = e.clientY - panelRect.top;
-          menu.style.left = `${relativeX}px`;
-          menu.style.top = `${relativeY}px`;
+          menu.setCssStyles({
+            left: relativeX + "px",
+            top: relativeY + "px"
+          });
           const parentFolder = child.parent;
           const newFileItem = menu.createDiv("context-menu-item");
           newFileItem.textContent = t("newFile", this.locale);
@@ -1154,12 +1182,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
                 if (filePath === "/") {
                   filePath = fileName2;
                 } else {
-                  filePath = `${parentFolder.path}/${fileName2}`;
+                  filePath = parentFolder.path + "/" + fileName2;
                 }
-                console.log("\u521B\u5EFA\u6587\u4EF6\u8DEF\u5F84:", filePath);
                 try {
                   const newFile = await this.app.vault.create(filePath, "");
-                  console.log("\u6587\u4EF6\u521B\u5EFA\u6210\u529F:", newFile);
                   const leaf = this.app.workspace.getLeaf();
                   await leaf.openFile(newFile);
                   state.expandedFolders.add(parentFolder.path);
@@ -1181,12 +1207,10 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
                 if (folderPath === "/") {
                   folderPath = folderName;
                 } else {
-                  folderPath = `${parentFolder.path}/${folderName}`;
+                  folderPath = parentFolder.path + "/" + folderName;
                 }
-                console.log("\u521B\u5EFA\u6587\u4EF6\u5939\u8DEF\u5F84:", folderPath);
                 try {
                   await this.app.vault.createFolder(folderPath);
-                  console.log("\u6587\u4EF6\u5939\u521B\u5EFA\u6210\u529F:", folderPath);
                   state.expandedFolders.add(parentFolder.path);
                   this.buildFolderTree(leafId);
                 } catch (error) {
@@ -1197,7 +1221,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           });
           const deleteItem = menu.createDiv("context-menu-item");
           deleteItem.textContent = t("deleteFile", this.locale);
-          deleteItem.style.color = "var(--text-error)";
+          deleteItem.addClass("context-menu-item-delete");
           deleteItem.addEventListener("click", async (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
@@ -1207,10 +1231,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               text: t("deleteFileConfirm", this.locale).replace("{name}", child.name)
             });
             const buttonContainer = confirmModal.contentEl.createDiv();
-            buttonContainer.style.display = "flex";
-            buttonContainer.style.justifyContent = "flex-end";
-            buttonContainer.style.gap = "10px";
-            buttonContainer.style.marginTop = "20px";
+            buttonContainer.addClass("floating-button-container-spaced");
             const cancelBtn = buttonContainer.createEl("button", { text: t("cancel", this.locale) });
             cancelBtn.addEventListener("click", () => {
               confirmModal.close();
@@ -1219,8 +1240,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             deleteBtn.addEventListener("click", async () => {
               confirmModal.close();
               try {
-                await this.app.vault.delete(child);
-                console.log("\u6587\u4EF6\u5220\u9664\u6210\u529F:", child.path);
+                await this.app.fileManager.trashFile(child);
                 this.buildFolderTree(leafId);
               } catch (error) {
                 console.error("\u5220\u9664\u6587\u4EF6\u5931\u8D25:", error);

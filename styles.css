@@ -169,6 +169,16 @@
 	color: var(--text-normal);
 }
 
+/* Active file highlighting */
+.file-item.is-active {
+	background-color: var(--background-modifier-active-hover);
+}
+
+.file-item.is-active .file-name {
+	color: var(--text-accent);
+	font-weight: 500;
+}
+
 /* Context menu */
 .folder-context-menu {
 	background-color: var(--background-primary);
@@ -221,3 +231,50 @@
 	font-weight: 500;
 }
 
+/* Modal Input Styling */
+.floating-modal-input {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+/* Button Container Layout */
+.floating-button-container {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.floating-button-container-spaced {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+/* Panel Visibility States */
+.floating-folder-panel.is-hidden {
+	display: none;
+}
+
+.floating-folder-panel.is-visible {
+	display: block;
+}
+
+/* Folder Children States */
+.folder-children.is-collapsed {
+	display: none;
+}
+
+.folder-children.is-expanded {
+	display: block;
+}
+
+/* Context Menu Positioning */
+.folder-context-menu {
+	position: absolute;
+}
+
+/* Delete Item Styling */
+.context-menu-item-delete {
+	color: var(--text-error);
+}

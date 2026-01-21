@@ -1,4 +1,23 @@
-import { Plugin, WorkspaceLeaf, TFile, TFolder, Modal, App } from 'obsidian';
+import { Plugin, WorkspaceLeaf, TFile, TFolder, Modal, App, Vault } from 'obsidian';
+
+// TypeScript interface extensions for Obsidian API
+interface ObsidianVault extends Vault {
+	getConfig(key: string): string | null;
+}
+
+interface ObsidianApp extends App {
+	vault: ObsidianVault;
+}
+
+interface MomentWindow extends Window {
+	moment?: {
+		locale(): string;
+	};
+}
+
+interface WorkspaceLeafExt extends WorkspaceLeaf {
+	containerEl: HTMLElement;
+}
 
 // 多语言翻译
 const translations: Record<string, Record<string, string>> = {
@@ -698,8 +717,7 @@ class InputModal extends Modal {
 			placeholder: this.placeholder,
 			value: this.placeholder
 		});
-		inputEl.style.width = '100%';
-		inputEl.style.marginBottom = '10px';
+		inputEl.addClass('floating-modal-input');
 
 		inputEl.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
@@ -710,9 +728,7 @@ class InputModal extends Modal {
 		});
 
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = 'flex';
-		buttonContainer.style.justifyContent = 'flex-end';
-		buttonContainer.style.gap = '10px';
+		buttonContainer.addClass('floating-button-container');
 
 		const cancelBtn = buttonContainer.createEl('button', { text: t('cancel', this.locale) });
 		cancelBtn.addEventListener('click', () => {
@@ -748,21 +764,62 @@ export default class FloatingExplorerPlugin extends Plugin {
 	private leafStates: Map<string, LeafState> = new Map();
 	private locale: string = 'en';
 
+	// SVG helper functions
+	private createFolderSvgIcon(container: HTMLElement, width: string = '16', height: string = '16'): void {
+		const svg = container.createSvg('svg', {
+			attr: {
+				xmlns: 'http://www.w3.org/2000/svg',
+				width: width,
+				height: height,
+				viewBox: '0 0 24 24',
+				fill: 'none',
+				stroke: 'currentColor',
+				'stroke-width': '2',
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round'
+			}
+		});
+		svg.createSvg('path', {
+			attr: {
+				d: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'
+			}
+		});
+	}
+
+	private createFileSvgIcon(container: HTMLElement): void {
+		const svg = container.createSvg('svg', {
+			attr: {
+				xmlns: 'http://www.w3.org/2000/svg',
+				width: '16',
+				height: '16',
+				viewBox: '0 0 24 24',
+				fill: 'none',
+				stroke: 'currentColor',
+				'stroke-width': '2'
+			}
+		});
+		svg.createSvg('path', {
+			attr: {
+				d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'
+			}
+		});
+		svg.createSvg('polyline', {
+			attr: {
+				points: '14 2 14 8 20 8'
+			}
+		});
+	}
+
 	async onload() {
-		console.log('Loading Floating Explorer Plugin');
+		console.debug('Loading Floating Explorer Plugin');
 
 		// 获取 Obsidian 的语言设置
 		// 尝试多种方法获取语言设置
-		const vaultLang = (this.app as any).vault.getConfig('language');
-		const localStorageLang = localStorage.getItem('language');
-		const momentLang = (window as any).moment?.locale();
-
-		console.log('vault.getConfig language:', vaultLang);
-		console.log('localStorage language:', localStorageLang);
-		console.log('moment.locale:', momentLang);
+		const vaultLang = (this.app as ObsidianApp).vault.getConfig('language');
+		const localStorageLang = this.app.loadLocalStorage('language');
+		const momentLang = (window as MomentWindow).moment?.locale();
 
 		this.locale = vaultLang || localStorageLang || momentLang || 'en';
-		console.log('Final detected locale:', this.locale);
 
 		// 等待工作区准备好
 		this.app.workspace.onLayoutReady(() => {
@@ -788,13 +845,13 @@ export default class FloatingExplorerPlugin extends Plugin {
 	}
 
 	onunload() {
-		console.log('Unloading Floating Explorer Plugin');
+		console.debug('Unloading Floating Explorer Plugin');
 		this.removeAllIcons();
 	}
 
 	getLeafId(leaf: WorkspaceLeaf): string {
 		// 使用leaf的view容器作为唯一标识
-		const container = (leaf as any).containerEl;
+		const container = (leaf as WorkspaceLeafExt).containerEl;
 		if (container && container.id) {
 			return container.id;
 		}
@@ -807,7 +864,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 	isLeafInMainEditor(leaf: WorkspaceLeaf): boolean {
 		// 检查leaf是否在主编辑区域（不在左侧或右侧侧边栏）
-		const container = (leaf as any).containerEl;
+		const container = (leaf as WorkspaceLeafExt).containerEl;
 		if (!container) return false;
 
 		// 检查容器是否在侧边栏中
@@ -876,19 +933,15 @@ export default class FloatingExplorerPlugin extends Plugin {
 		// 创建悬浮图标
 		const floatingIcon = document.createElement('div');
 		floatingIcon.addClass('floating-explorer-icon');
-		floatingIcon.innerHTML = `
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-			</svg>
-		`;
+		this.createFolderSvgIcon(floatingIcon, '20', '20');
 
 		// 创建文件夹面板
 		const folderPanel = document.createElement('div');
 		folderPanel.addClass('floating-folder-panel');
-		folderPanel.style.display = 'none';
+		folderPanel.addClass('is-hidden');
 
 		// 添加到leaf容器而不是document.body
-		const leafContainer = (leaf as any).containerEl;
+		const leafContainer = (leaf as WorkspaceLeafExt).containerEl;
 		leafContainer.appendChild(floatingIcon);
 		leafContainer.appendChild(folderPanel);
 
@@ -955,7 +1008,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 		this.buildFolderTree(leafId);
 
 		// 显示面板
-		state.folderPanel.style.display = 'block';
+		state.folderPanel.removeClass('is-hidden');
+		state.folderPanel.addClass('is-visible');
 	}
 
 	scheduleHidePanel(leafId: string) {
@@ -964,7 +1018,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 		state.hideTimeout = setTimeout(() => {
 			if (state.folderPanel) {
-				state.folderPanel.style.display = 'none';
+				state.folderPanel.removeClass('is-visible');
+				state.folderPanel.addClass('is-hidden');
 			}
 		}, 300); // 300ms 延迟
 	}
@@ -1005,10 +1060,10 @@ export default class FloatingExplorerPlugin extends Plugin {
 		// 如果在focus mode，添加一个unfocus按钮在顶部
 		if (state.focusedFolder) {
 			const unfocusBar = treeContainer.createDiv('unfocus-bar');
-			unfocusBar.innerHTML = `
-				<span class="unfocus-icon">◀</span>
-				<span class="unfocus-text">Focused: ${startFolder.name}</span>
-			`;
+			const iconSpan = unfocusBar.createSpan({ cls: 'unfocus-icon' });
+			iconSpan.textContent = '◀';
+			const textSpan = unfocusBar.createSpan({ cls: 'unfocus-text' });
+			textSpan.textContent = `Focused: ${startFolder.name}`;
 			unfocusBar.addEventListener('click', () => {
 				state.focusedFolder = null;
 				this.buildFolderTree(leafId);
@@ -1032,7 +1087,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 		children.forEach((child) => {
 			if (child instanceof TFolder) {
 				const folderItem = container.createDiv('folder-item');
-				folderItem.style.paddingLeft = `${level * 16}px`;
+				folderItem.setCssStyles({ "padding-left": (level * 16) + "px" });
 
 				const folderHeader = folderItem.createDiv('folder-header');
 
@@ -1041,15 +1096,11 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 				// 检查这个文件夹是否已展开
 				const isExpanded = state.expandedFolders.has(child.path);
-				toggleIcon.innerHTML = isExpanded ? '▼' : '▶';
+				toggleIcon.textContent = isExpanded ? '▼' : '▶';
 
 				// 文件夹图标
 				const folderIcon = folderHeader.createSpan('folder-icon');
-				folderIcon.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-					</svg>
-				`;
+			this.createFolderSvgIcon(folderIcon);
 
 				// 文件夹名称
 				const folderName = folderHeader.createSpan('folder-name');
@@ -1057,7 +1108,11 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 				// 子文件夹容器
 				const childContainer = folderItem.createDiv('folder-children');
-				childContainer.style.display = isExpanded ? 'block' : 'none';
+			if (isExpanded) {
+				childContainer.addClass('is-expanded');
+			} else {
+				childContainer.addClass('is-collapsed');
+			}
 
 				// 递归渲染子文件夹
 				this.renderFolder(child, childContainer, level + 1, leafId);
@@ -1071,12 +1126,12 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 					if (nowExpanded) {
 						state.expandedFolders.delete(child.path);
-						childContainer.style.display = 'none';
-						toggleIcon.innerHTML = '▶';
+						childContainer.removeClass('is-expanded'); childContainer.addClass('is-collapsed');
+						toggleIcon.textContent = '▶';
 					} else {
 						state.expandedFolders.add(child.path);
-						childContainer.style.display = 'block';
-						toggleIcon.innerHTML = '▼';
+						childContainer.removeClass('is-collapsed'); childContainer.addClass('is-expanded');
+						toggleIcon.textContent = '▼';
 					}
 				});
 
@@ -1090,15 +1145,13 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 					const menu = document.createElement('div');
 					menu.addClass('folder-context-menu');
-					menu.style.position = 'absolute';
 
 					// 计算相对于folderPanel的位置
 					const panelRect = state.folderPanel.getBoundingClientRect();
 					const relativeX = e.clientX - panelRect.left;
 					const relativeY = e.clientY - panelRect.top;
 
-					menu.style.left = `${relativeX}px`;
-					menu.style.top = `${relativeY}px`;
+					menu.setCssStyles({ left: relativeX + "px", top: relativeY + "px" });
 
 					const isFocused = state.focusedFolder === child.path;
 
@@ -1116,14 +1169,12 @@ export default class FloatingExplorerPlugin extends Plugin {
 								if (filePath === '/') {
 									filePath = fileName;
 								} else {
-									filePath = `${child.path}/${fileName}`;
+									filePath = child.path + "/" + fileName;
 								}
 
-								console.log('创建文件路径:', filePath);
 
 								try {
 									const newFile = await this.app.vault.create(filePath, '');
-									console.log('文件创建成功:', newFile);
 
 									// 打开新创建的文件
 									const leaf = this.app.workspace.getLeaf();
@@ -1155,14 +1206,12 @@ export default class FloatingExplorerPlugin extends Plugin {
 								if (folderPath === '/') {
 									folderPath = folderName;
 								} else {
-									folderPath = `${child.path}/${folderName}`;
+									folderPath = child.path + "/" + folderName;
 								}
 
-								console.log('创建文件夹路径:', folderPath);
 
 								try {
 									await this.app.vault.createFolder(folderPath);
-									console.log('文件夹创建成功:', folderPath);
 
 									// 展开父文件夹以显示新创建的文件夹
 									state.expandedFolders.add(child.path);
@@ -1178,7 +1227,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					// 删除文件夹菜单项
 					const deleteItem = menu.createDiv('context-menu-item');
 					deleteItem.textContent = t('deleteFolder', this.locale);
-					deleteItem.style.color = 'var(--text-error)';
+					deleteItem.addClass('context-menu-item-delete');
 					deleteItem.addEventListener('click', async (clickEvent) => {
 						clickEvent.stopPropagation();
 						menu.remove();
@@ -1191,10 +1240,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const buttonContainer = confirmModal.contentEl.createDiv();
-						buttonContainer.style.display = 'flex';
-						buttonContainer.style.justifyContent = 'flex-end';
-						buttonContainer.style.gap = '10px';
-						buttonContainer.style.marginTop = '20px';
+						buttonContainer.addClass('floating-button-container-spaced');
 
 						const cancelBtn = buttonContainer.createEl('button', { text: t('cancel', this.locale) });
 						cancelBtn.addEventListener('click', () => {
@@ -1205,8 +1251,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						deleteBtn.addEventListener('click', async () => {
 							confirmModal.close();
 							try {
-								await this.app.vault.delete(child, true);
-								console.log('文件夹删除成功:', child.path);
+								await this.app.fileManager.trashFile(child);
 								// 重新构建树
 								this.buildFolderTree(leafId);
 							} catch (error) {
@@ -1254,16 +1299,18 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 			} else if (child instanceof TFile) {
 				const fileItem = container.createDiv('file-item');
-				fileItem.style.paddingLeft = `${(level + 1) * 16}px`;
+				fileItem.setCssStyles({ "padding-left": ((level + 1) * 16) + "px" });
 
+
+			// Check if this is the active file
+			const activeFile = this.app.workspace.getActiveFile();
+			if (activeFile && activeFile.path === child.path) {
+				fileItem.addClass('is-active');
+			}
 				// 文件图标
 				const fileIcon = fileItem.createSpan('file-icon');
-				fileIcon.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-						<polyline points="14 2 14 8 20 8"></polyline>
-					</svg>
-				`;
+			this.createFileSvgIcon(fileIcon);
+		
 
 				// 文件名称
 				const fileName = fileItem.createSpan('file-name');
@@ -1274,7 +1321,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					const leaf = this.app.workspace.getLeaf();
 					await leaf.openFile(child);
 					if (state.folderPanel) {
-						state.folderPanel.style.display = 'none';
+						state.folderPanel.removeClass('is-visible'); state.folderPanel.addClass('is-hidden');
 					}
 				});
 
@@ -1288,15 +1335,17 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 					const menu = document.createElement('div');
 					menu.addClass('folder-context-menu');
-					menu.style.position = 'absolute';
 
 					// 计算相对于folderPanel的位置
 					const panelRect = state.folderPanel.getBoundingClientRect();
 					const relativeX = e.clientX - panelRect.left;
 					const relativeY = e.clientY - panelRect.top;
 
-					menu.style.left = `${relativeX}px`;
-					menu.style.top = `${relativeY}px`;
+
+				menu.setCssStyles({
+					left: relativeX + "px",
+					top: relativeY + "px"
+				});
 
 					// 获取文件所在的文件夹
 					const parentFolder = child.parent;
@@ -1315,14 +1364,12 @@ export default class FloatingExplorerPlugin extends Plugin {
 								if (filePath === '/') {
 									filePath = fileName;
 								} else {
-									filePath = `${parentFolder.path}/${fileName}`;
+									filePath = parentFolder.path + "/" + fileName;
 								}
 
-								console.log('创建文件路径:', filePath);
 
 								try {
 									const newFile = await this.app.vault.create(filePath, '');
-									console.log('文件创建成功:', newFile);
 
 									// 打开新创建的文件
 									const leaf = this.app.workspace.getLeaf();
@@ -1353,14 +1400,12 @@ export default class FloatingExplorerPlugin extends Plugin {
 								if (folderPath === '/') {
 									folderPath = folderName;
 								} else {
-									folderPath = `${parentFolder.path}/${folderName}`;
+									folderPath = parentFolder.path + "/" + folderName;
 								}
 
-								console.log('创建文件夹路径:', folderPath);
 
 								try {
 									await this.app.vault.createFolder(folderPath);
-									console.log('文件夹创建成功:', folderPath);
 
 									// 展开父文件夹以显示新创建的文件夹
 									state.expandedFolders.add(parentFolder.path);
@@ -1376,7 +1421,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					// 删除文件菜单项
 					const deleteItem = menu.createDiv('context-menu-item');
 					deleteItem.textContent = t('deleteFile', this.locale);
-					deleteItem.style.color = 'var(--text-error)';
+					deleteItem.addClass('context-menu-item-delete');
 					deleteItem.addEventListener('click', async (clickEvent) => {
 						clickEvent.stopPropagation();
 						menu.remove();
@@ -1389,10 +1434,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const buttonContainer = confirmModal.contentEl.createDiv();
-						buttonContainer.style.display = 'flex';
-						buttonContainer.style.justifyContent = 'flex-end';
-						buttonContainer.style.gap = '10px';
-						buttonContainer.style.marginTop = '20px';
+						buttonContainer.addClass('floating-button-container-spaced');
 
 						const cancelBtn = buttonContainer.createEl('button', { text: t('cancel', this.locale) });
 						cancelBtn.addEventListener('click', () => {
@@ -1403,8 +1445,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						deleteBtn.addEventListener('click', async () => {
 							confirmModal.close();
 							try {
-								await this.app.vault.delete(child);
-								console.log('文件删除成功:', child.path);
+								await this.app.fileManager.trashFile(child);
 								// 重新构建树
 								this.buildFolderTree(leafId);
 							} catch (error) {

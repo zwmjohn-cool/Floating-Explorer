@@ -9,8 +9,11 @@ An Obsidian plugin that displays a floating folder browser icon in the top-right
 - Collapsible/expandable tree-style file browser
 - Seamlessly integrates with Obsidian theme styles
 - Quick file opening with a single click
+- **Active file highlighting**: Currently opened file is highlighted in the explorer
 - Focus mode: Right-click on any folder to focus on that folder only
 - Per-pane state: Each editor pane maintains its own explorer state
+- Context menu support: Right-click to create/delete files and folders
+- Multilingual support: Auto-detects system language (English/Chinese)
 
 ## demo
 
