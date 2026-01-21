@@ -1,17 +1,16 @@
 # Floating Explorer - Obsidian Plugin
 
-<div align="right">
-  <a href="#" onclick="switchLang('en'); return false;" id="lang-en">English</a> |
-  <a href="#" onclick="switchLang('zh'); return false;" id="lang-zh">中文</a>
-</div>
+[English](#english) | [中文](#中文)
 
-<div id="content-en" class="lang-content">
+---
 
-## Overview
+## English
+
+### Overview
 
 An Obsidian plugin that displays a floating folder browser icon in the top-right corner of each page.
 
-## Features
+### Features
 
 - **Floating folder icon**: Appears in the top-right corner of each page
 - **Hover to browse**: Display complete folder structure on hover
@@ -24,13 +23,13 @@ An Obsidian plugin that displays a floating folder browser icon in the top-right
 - **Multilingual support**: Auto-detects system language (36+ languages supported)
 - **Theme integration**: Seamlessly integrates with Obsidian theme styles
 
-## Demo
+### Demo
 
 ![demo](./demo.gif)
 
-## Installation
+### Installation
 
-### Quick Installation (Recommended)
+#### Quick Installation (Recommended)
 
 Simply copy these three files to your Obsidian vault's plugin directory:
 
@@ -51,7 +50,7 @@ Simply copy these three files to your Obsidian vault's plugin directory:
    - Refresh the plugin list
    - Find "Floating Explorer" and enable it
 
-### Build from Source (For Development)
+#### Build from Source (For Development)
 
 Only needed if you want to modify the TypeScript source code (`main.ts`):
 
@@ -62,7 +61,7 @@ npm run build
 
 This compiles `main.ts` into `main.js`.
 
-## Usage
+### Usage
 
 1. After enabling the plugin, you'll see a floating folder icon (📁) in the top-right corner of each page
 2. Hover over the icon to display the complete folder structure
@@ -77,22 +76,22 @@ This compiles `main.ts` into `main.js`.
 7. **Right-click** on any folder to enter Focus Mode for that folder
 8. Click the back arrow (←) at the top to exit Focus Mode
 
-## Context Menu Options
+### Context Menu Options
 
-### File Context Menu
+#### File Context Menu
 - **Open in New Tab**: Open the file in a new tab without closing the current one
 - **New File**: Create a new file in the parent folder
 - **New Folder**: Create a new folder in the parent folder
 - **Delete File**: Delete the selected file (with confirmation)
 
-### Folder Context Menu
+#### Folder Context Menu
 - **New File**: Create a new file in this folder
 - **New Folder**: Create a new subfolder
 - **Delete Folder**: Delete the folder (with confirmation)
 - **Focus Mode**: Focus on this folder only
 - **Unfocus**: Exit focus mode (appears when in focus mode)
 
-## Development
+### Development
 
 ```bash
 # Install dependencies
@@ -105,42 +104,43 @@ npm run dev
 npm run build
 ```
 
-## Tech Stack
+### Tech Stack
 
 - TypeScript
 - Obsidian API
 - esbuild
 
-## Changelog
+### Changelog
 
-### v1.2.2
+#### v1.3.0
 - Added "Open in New Tab" context menu option for files
 - Improved multilingual support with translations for 36+ languages
+- Updated README with bilingual support
 
-### v1.2.1
+#### v1.2.1
 - Added context menu support for files and folders
 - Improved file/folder management
 
-### v1.0.0
+#### v1.0.0
 - Initial release with floating explorer functionality
 
-## License
+### License
 
 MIT
 
-## Feedback
+### Feedback
 
-If you have any issues or suggestions, feel free to [submit an issue](https://github.com/your-username/obsidian-floating-explorer/issues).
+If you have any issues or suggestions, feel free to [submit an issue](https://github.com/zwmjohn-cool/Floating-Explorer/issues).
 
-</div>
+---
 
-<div id="content-zh" class="lang-content" style="display: none;">
+## 中文
 
-## 概述
+### 概述
 
 一个 Obsidian 插件，在每个页面的右上角显示一个浮动文件夹浏览器图标。
 
-## 功能特性
+### 功能特性
 
 - **浮动文件夹图标**：在每个页面的右上角显示
 - **悬停浏览**：鼠标悬停时显示完整的文件夹结构
@@ -153,13 +153,13 @@ If you have any issues or suggestions, feel free to [submit an issue](https://gi
 - **多语言支持**：自动检测系统语言（支持 36+ 种语言）
 - **主题集成**：无缝集成 Obsidian 主题样式
 
-## 演示
+### 演示
 
 ![演示](./demo.gif)
 
-## 安装
+### 安装
 
-### 快速安装（推荐）
+#### 快速安装（推荐）
 
 只需将以下三个文件复制到你的 Obsidian vault 插件目录：
 
@@ -180,7 +180,7 @@ If you have any issues or suggestions, feel free to [submit an issue](https://gi
    - 刷新插件列表
    - 找到 "Floating Explorer" 并启用
 
-### 从源码构建（仅用于开发）
+#### 从源码构建（仅用于开发）
 
 仅当你想修改 TypeScript 源代码（`main.ts`）时需要：
 
@@ -191,7 +191,7 @@ npm run build
 
 这会将 `main.ts` 编译为 `main.js`。
 
-## 使用方法
+### 使用方法
 
 1. 启用插件后，你会在每个页面的右上角看到一个浮动文件夹图标（📁）
 2. 将鼠标悬停在图标上以显示完整的文件夹结构
@@ -206,22 +206,22 @@ npm run build
 7. **右键点击**任意文件夹以进入该文件夹的聚焦模式
 8. 点击顶部的返回箭头（←）退出聚焦模式
 
-## 右键菜单选项
+### 右键菜单选项
 
-### 文件右键菜单
+#### 文件右键菜单
 - **在新标签页打开**：在新标签页中打开文件，不关闭当前标签页
 - **新建文件**：在父文件夹中创建新文件
 - **新建文件夹**：在父文件夹中创建新文件夹
 - **删除文件**：删除选定的文件（需确认）
 
-### 文件夹右键菜单
+#### 文件夹右键菜单
 - **新建文件**：在此文件夹中创建新文件
 - **新建文件夹**：创建新子文件夹
 - **删除文件夹**：删除文件夹（需确认）
 - **聚焦模式**：仅聚焦此文件夹
 - **取消聚焦**：退出聚焦模式（在聚焦模式时显示）
 
-## 开发
+### 开发
 
 ```bash
 # 安装依赖
@@ -234,77 +234,30 @@ npm run dev
 npm run build
 ```
 
-## 技术栈
+### 技术栈
 
 - TypeScript
 - Obsidian API
 - esbuild
 
-## 更新日志
+### 更新日志
 
-### v1.2.2
+#### v1.3.0
 - 新增文件的"在新标签页打开"右键菜单选项
 - 改进多语言支持，翻译支持 36+ 种语言
+- 更新 README 支持中英双语
 
-### v1.2.1
+#### v1.2.1
 - 新增文件和文件夹的右键菜单支持
 - 改进文件/文件夹管理
 
-### v1.0.0
+#### v1.0.0
 - 初始版本，浮动浏览器功能
 
-## 许可证
+### 许可证
 
 MIT
 
-## 反馈
+### 反馈
 
-如果你有任何问题或建议，欢迎[提交 issue](https://github.com/your-username/obsidian-floating-explorer/issues)。
-
-</div>
-
-<script>
-function switchLang(lang) {
-  const enContent = document.getElementById('content-en');
-  const zhContent = document.getElementById('content-zh');
-  const enLink = document.getElementById('lang-en');
-  const zhLink = document.getElementById('lang-zh');
-
-  if (lang === 'en') {
-    enContent.style.display = 'block';
-    zhContent.style.display = 'none';
-    enLink.style.fontWeight = 'bold';
-    zhLink.style.fontWeight = 'normal';
-    localStorage.setItem('readme-lang', 'en');
-  } else {
-    enContent.style.display = 'none';
-    zhContent.style.display = 'block';
-    enLink.style.fontWeight = 'normal';
-    zhLink.style.fontWeight = 'bold';
-    localStorage.setItem('readme-lang', 'zh');
-  }
-}
-
-// Load saved language preference or default to English
-document.addEventListener('DOMContentLoaded', function() {
-  const savedLang = localStorage.getItem('readme-lang') || 'en';
-  switchLang(savedLang);
-});
-</script>
-
-<style>
-.lang-content {
-  margin-top: 20px;
-}
-
-#lang-en, #lang-zh {
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  padding: 0 5px;
-}
-
-#lang-en:hover, #lang-zh:hover {
-  text-decoration: underline;
-}
-</style>
+如果你有任何问题或建议，欢迎[提交 issue](https://github.com/zwmjohn-cool/Floating-Explorer/issues)。
