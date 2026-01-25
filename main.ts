@@ -1199,7 +1199,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
-							void (async () => {
+							(async () => {
 							if (fileName) {
 								// 处理路径，确保正确
 								let filePath = child.path;
@@ -1238,7 +1238,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
-							void (async () => {
+							(async () => {
 							if (folderName) {
 								// 处理路径，确保正确
 								let folderPath = child.path;
@@ -1288,7 +1288,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
-						deleteBtn.addEventListener('click', async () => {
+						deleteBtn.addEventListener('click', () => {
+							(async () => {
 							confirmModal.close();
 							try {
 								await this.app.fileManager.trashFile(child);
@@ -1297,8 +1298,9 @@ export default class FloatingExplorerPlugin extends Plugin {
 							} catch (error) {
 								console.error('删除文件夹失败:', error);
 							}
-						});
+						})();
 
+						});
 						confirmModal.open();
 					});
 
@@ -1358,7 +1360,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 				// 点击打开文件
 				fileItem.addEventListener('click', () => {
-					void (async () => {
+					(async () => {
 					const leaf = this.app.workspace.getLeaf();
 					await leaf.openFile(child);
 					if (state.folderPanel) {
@@ -1396,7 +1398,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					const openInNewTabItem = menu.createDiv('context-menu-item');
 					openInNewTabItem.textContent = t('openInNewTab', this.locale);
 					openInNewTabItem.addEventListener('click', (clickEvent) => {
-						void (async () => {
+						(async () => {
 						clickEvent.stopPropagation();
 						menu.remove();
 
@@ -1420,7 +1422,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
-							void (async () => {
+							(async () => {
 							if (fileName && parentFolder) {
 								// 处理路径，确保正确
 								let filePath = parentFolder.path;
@@ -1458,7 +1460,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
-							void (async () => {
+							(async () => {
 							if (folderName && parentFolder) {
 								// 处理路径，确保正确
 								let folderPath = parentFolder.path;
@@ -1508,7 +1510,8 @@ export default class FloatingExplorerPlugin extends Plugin {
 						});
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
-						deleteBtn.addEventListener('click', async () => {
+						deleteBtn.addEventListener('click', () => {
+							(async () => {
 							confirmModal.close();
 							try {
 								await this.app.fileManager.trashFile(child);
@@ -1517,8 +1520,9 @@ export default class FloatingExplorerPlugin extends Plugin {
 							} catch (error) {
 								console.error('删除文件失败:', error);
 							}
-						});
+						})();
 
+						});
 						confirmModal.open();
 					});
 
