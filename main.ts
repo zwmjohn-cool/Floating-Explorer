@@ -1226,7 +1226,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									new Modal(this.app).open();
 								}
 							}
-							})();
+							})().catch(error => console.error('Failed to create file:', error));
 						}).open();
 					});
 
@@ -1260,7 +1260,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件夹失败:', error);
 								}
 							}
-							})();
+							})().catch(error => console.error('Failed to create folder:', error));
 						}).open();
 					});
 
@@ -1298,7 +1298,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 							} catch (error) {
 								console.error('删除文件夹失败:', error);
 							}
-						})();
+						})().catch(error => console.error('Failed to delete folder:', error));
 
 						});
 						confirmModal.open();
@@ -1366,7 +1366,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					if (state.folderPanel) {
 						state.folderPanel.removeClass('is-visible'); state.folderPanel.addClass('is-hidden');
 					}
-				})();
+				})().catch(error => console.error('Failed to open file:', error));
 		});
 
 				// 文件右键菜单
@@ -1411,7 +1411,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 							state.folderPanel.removeClass('is-visible');
 							state.folderPanel.addClass('is-hidden');
 						}
-						})();
+						})().catch(error => console.error('Failed to open file in new tab:', error));
 					});
 
 					// 创建新文件菜单项
@@ -1448,7 +1448,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件失败:', error);
 								}
 							}
-						})();
+						})().catch(error => console.error('Failed to create file:', error));
 						}).open();
 					});
 
@@ -1482,7 +1482,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 									console.error('创建文件夹失败:', error);
 								}
 							}
-						})();
+						})().catch(error => console.error('Failed to create folder:', error));
 						}).open();
 					});
 
@@ -1520,7 +1520,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 							} catch (error) {
 								console.error('删除文件失败:', error);
 							}
-						})();
+						})().catch(error => console.error('Failed to delete file:', error));
 
 						});
 						confirmModal.open();

@@ -1077,25 +1077,27 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           newFileItem.addEventListener("click", (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
-            new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), async (fileName) => {
-              if (fileName) {
-                let filePath = child.path;
-                if (filePath === "/") {
-                  filePath = fileName;
-                } else {
-                  filePath = child.path + "/" + fileName;
+            new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), (fileName) => {
+              (async () => {
+                if (fileName) {
+                  let filePath = child.path;
+                  if (filePath === "/") {
+                    filePath = fileName;
+                  } else {
+                    filePath = child.path + "/" + fileName;
+                  }
+                  try {
+                    const newFile = await this.app.vault.create(filePath, "");
+                    const leaf = this.app.workspace.getLeaf();
+                    await leaf.openFile(newFile);
+                    state.expandedFolders.add(child.path);
+                    this.buildFolderTree(leafId);
+                  } catch (error) {
+                    console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
+                    new import_obsidian.Modal(this.app).open();
+                  }
                 }
-                try {
-                  const newFile = await this.app.vault.create(filePath, "");
-                  const leaf = this.app.workspace.getLeaf();
-                  await leaf.openFile(newFile);
-                  state.expandedFolders.add(child.path);
-                  this.buildFolderTree(leafId);
-                } catch (error) {
-                  console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
-                  new import_obsidian.Modal(this.app).open();
-                }
-              }
+              })().catch((error) => console.error("Failed to create file:", error));
             }).open();
           });
           const newFolderItem = menu.createDiv("context-menu-item");
@@ -1103,22 +1105,24 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           newFolderItem.addEventListener("click", (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
-            new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), async (folderName2) => {
-              if (folderName2) {
-                let folderPath = child.path;
-                if (folderPath === "/") {
-                  folderPath = folderName2;
-                } else {
-                  folderPath = child.path + "/" + folderName2;
+            new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), (folderName2) => {
+              (async () => {
+                if (folderName2) {
+                  let folderPath = child.path;
+                  if (folderPath === "/") {
+                    folderPath = folderName2;
+                  } else {
+                    folderPath = child.path + "/" + folderName2;
+                  }
+                  try {
+                    await this.app.vault.createFolder(folderPath);
+                    state.expandedFolders.add(child.path);
+                    this.buildFolderTree(leafId);
+                  } catch (error) {
+                    console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
+                  }
                 }
-                try {
-                  await this.app.vault.createFolder(folderPath);
-                  state.expandedFolders.add(child.path);
-                  this.buildFolderTree(leafId);
-                } catch (error) {
-                  console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
-                }
-              }
+              })().catch((error) => console.error("Failed to create folder:", error));
             }).open();
           });
           const deleteItem = menu.createDiv("context-menu-item");
@@ -1139,14 +1143,16 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               confirmModal.close();
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
-            deleteBtn.addEventListener("click", async () => {
-              confirmModal.close();
-              try {
-                await this.app.fileManager.trashFile(child);
-                this.buildFolderTree(leafId);
-              } catch (error) {
-                console.error("\u5220\u9664\u6587\u4EF6\u5939\u5931\u8D25:", error);
-              }
+            deleteBtn.addEventListener("click", () => {
+              (async () => {
+                confirmModal.close();
+                try {
+                  await this.app.fileManager.trashFile(child);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u5220\u9664\u6587\u4EF6\u5939\u5931\u8D25:", error);
+                }
+              })().catch((error) => console.error("Failed to delete folder:", error));
             });
             confirmModal.open();
           });
@@ -1185,13 +1191,15 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
         this.createFileSvgIcon(fileIcon);
         const fileName = fileItem.createSpan("file-name");
         fileName.textContent = child.name;
-        fileItem.addEventListener("click", async () => {
-          const leaf = this.app.workspace.getLeaf();
-          await leaf.openFile(child);
-          if (state.folderPanel) {
-            state.folderPanel.removeClass("is-visible");
-            state.folderPanel.addClass("is-hidden");
-          }
+        fileItem.addEventListener("click", () => {
+          (async () => {
+            const leaf = this.app.workspace.getLeaf();
+            await leaf.openFile(child);
+            if (state.folderPanel) {
+              state.folderPanel.removeClass("is-visible");
+              state.folderPanel.addClass("is-hidden");
+            }
+          })().catch((error) => console.error("Failed to open file:", error));
         });
         fileItem.addEventListener("contextmenu", (e) => {
           e.preventDefault();
@@ -1209,39 +1217,43 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           const parentFolder = child.parent;
           const openInNewTabItem = menu.createDiv("context-menu-item");
           openInNewTabItem.textContent = t("openInNewTab", this.locale);
-          openInNewTabItem.addEventListener("click", async (clickEvent) => {
-            clickEvent.stopPropagation();
-            menu.remove();
-            const leaf = this.app.workspace.getLeaf("tab");
-            await leaf.openFile(child);
-            if (state.folderPanel) {
-              state.folderPanel.removeClass("is-visible");
-              state.folderPanel.addClass("is-hidden");
-            }
+          openInNewTabItem.addEventListener("click", (clickEvent) => {
+            (async () => {
+              clickEvent.stopPropagation();
+              menu.remove();
+              const leaf = this.app.workspace.getLeaf("tab");
+              await leaf.openFile(child);
+              if (state.folderPanel) {
+                state.folderPanel.removeClass("is-visible");
+                state.folderPanel.addClass("is-hidden");
+              }
+            })().catch((error) => console.error("Failed to open file in new tab:", error));
           });
           const newFileItem = menu.createDiv("context-menu-item");
           newFileItem.textContent = t("newFile", this.locale);
           newFileItem.addEventListener("click", (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
-            new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), async (fileName2) => {
-              if (fileName2 && parentFolder) {
-                let filePath = parentFolder.path;
-                if (filePath === "/") {
-                  filePath = fileName2;
-                } else {
-                  filePath = parentFolder.path + "/" + fileName2;
+            new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), (fileName2) => {
+              (async () => {
+                if (fileName2 && parentFolder) {
+                  let filePath = parentFolder.path;
+                  if (filePath === "/") {
+                    filePath = fileName2;
+                  } else {
+                    filePath = parentFolder.path + "/" + fileName2;
+                  }
+                  try {
+                    const newFile = await this.app.vault.create(filePath, "");
+                    const leaf = this.app.workspace.getLeaf();
+                    await leaf.openFile(newFile);
+                    state.expandedFolders.add(parentFolder.path);
+                    this.buildFolderTree(leafId);
+                  } catch (error) {
+                    console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
+                  }
                 }
-                try {
-                  const newFile = await this.app.vault.create(filePath, "");
-                  const leaf = this.app.workspace.getLeaf();
-                  await leaf.openFile(newFile);
-                  state.expandedFolders.add(parentFolder.path);
-                  this.buildFolderTree(leafId);
-                } catch (error) {
-                  console.error("\u521B\u5EFA\u6587\u4EF6\u5931\u8D25:", error);
-                }
-              }
+              })().catch((error) => console.error("Failed to create file:", error));
             }).open();
           });
           const newFolderItem = menu.createDiv("context-menu-item");
@@ -1249,22 +1261,24 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           newFolderItem.addEventListener("click", (clickEvent) => {
             clickEvent.stopPropagation();
             menu.remove();
-            new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), async (folderName) => {
-              if (folderName && parentFolder) {
-                let folderPath = parentFolder.path;
-                if (folderPath === "/") {
-                  folderPath = folderName;
-                } else {
-                  folderPath = parentFolder.path + "/" + folderName;
+            new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), (folderName) => {
+              (async () => {
+                if (folderName && parentFolder) {
+                  let folderPath = parentFolder.path;
+                  if (folderPath === "/") {
+                    folderPath = folderName;
+                  } else {
+                    folderPath = parentFolder.path + "/" + folderName;
+                  }
+                  try {
+                    await this.app.vault.createFolder(folderPath);
+                    state.expandedFolders.add(parentFolder.path);
+                    this.buildFolderTree(leafId);
+                  } catch (error) {
+                    console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
+                  }
                 }
-                try {
-                  await this.app.vault.createFolder(folderPath);
-                  state.expandedFolders.add(parentFolder.path);
-                  this.buildFolderTree(leafId);
-                } catch (error) {
-                  console.error("\u521B\u5EFA\u6587\u4EF6\u5939\u5931\u8D25:", error);
-                }
-              }
+              })().catch((error) => console.error("Failed to create folder:", error));
             }).open();
           });
           const deleteItem = menu.createDiv("context-menu-item");
@@ -1285,14 +1299,16 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
               confirmModal.close();
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
-            deleteBtn.addEventListener("click", async () => {
-              confirmModal.close();
-              try {
-                await this.app.fileManager.trashFile(child);
-                this.buildFolderTree(leafId);
-              } catch (error) {
-                console.error("\u5220\u9664\u6587\u4EF6\u5931\u8D25:", error);
-              }
+            deleteBtn.addEventListener("click", () => {
+              (async () => {
+                confirmModal.close();
+                try {
+                  await this.app.fileManager.trashFile(child);
+                  this.buildFolderTree(leafId);
+                } catch (error) {
+                  console.error("\u5220\u9664\u6587\u4EF6\u5931\u8D25:", error);
+                }
+              })().catch((error) => console.error("Failed to delete file:", error));
             });
             confirmModal.open();
           });
