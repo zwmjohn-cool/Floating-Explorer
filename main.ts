@@ -1199,7 +1199,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
-							(async () => {
+							void (async () => {
 							if (fileName) {
 								// 处理路径，确保正确
 								let filePath = child.path;
@@ -1238,7 +1238,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
-							(async () => {
+							void (async () => {
 							if (folderName) {
 								// 处理路径，确保正确
 								let folderPath = child.path;
@@ -1289,7 +1289,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
 						deleteBtn.addEventListener('click', () => {
-							(async () => {
+							void (async () => {
 							confirmModal.close();
 							try {
 								await this.app.fileManager.trashFile(child);
@@ -1360,7 +1360,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 				// 点击打开文件
 				fileItem.addEventListener('click', () => {
-					(async () => {
+					void (async () => {
 					const leaf = this.app.workspace.getLeaf();
 					await leaf.openFile(child);
 					if (state.folderPanel) {
@@ -1398,7 +1398,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 					const openInNewTabItem = menu.createDiv('context-menu-item');
 					openInNewTabItem.textContent = t('openInNewTab', this.locale);
 					openInNewTabItem.addEventListener('click', (clickEvent) => {
-						(async () => {
+						void (async () => {
 						clickEvent.stopPropagation();
 						menu.remove();
 
@@ -1422,7 +1422,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFileTitle', this.locale), t('untitled', this.locale), (fileName) => {
-							(async () => {
+							void (async () => {
 							if (fileName && parentFolder) {
 								// 处理路径，确保正确
 								let filePath = parentFolder.path;
@@ -1460,7 +1460,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 						menu.remove();
 
 						new InputModal(this.app, t('newFolderTitle', this.locale), t('newFolderName', this.locale), (folderName) => {
-							(async () => {
+							void (async () => {
 							if (folderName && parentFolder) {
 								// 处理路径，确保正确
 								let folderPath = parentFolder.path;
@@ -1511,7 +1511,7 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 						const deleteBtn = buttonContainer.createEl('button', { text: t('delete', this.locale), cls: 'mod-warning' });
 						deleteBtn.addEventListener('click', () => {
-							(async () => {
+							void (async () => {
 							confirmModal.close();
 							try {
 								await this.app.fileManager.trashFile(child);

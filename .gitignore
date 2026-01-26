@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build
+*.js.map
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+
+# Playwright MCP
+.playwright-mcp/
+
+# Obsidian
+.obsidian/workspace
