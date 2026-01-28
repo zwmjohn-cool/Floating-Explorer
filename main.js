@@ -960,6 +960,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     if (!state)
       return;
     this.cancelHidePanel(leafId);
+    this.expandActiveFilePath(leafId);
     this.buildFolderTree(leafId);
     state.folderPanel.removeClass("is-hidden");
     state.folderPanel.addClass("is-visible");
@@ -982,6 +983,32 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
     if (state.hideTimeout) {
       clearTimeout(state.hideTimeout);
       state.hideTimeout = null;
+    }
+  }
+  expandActiveFilePath(leafId) {
+    const state = this.leafStates.get(leafId);
+    if (!state)
+      return;
+    const activeFile = this.app.workspace.getActiveFile();
+    if (!activeFile)
+      return;
+    if (state.focusedFolder) {
+      if (!activeFile.path.startsWith(state.focusedFolder + "/") && activeFile.path !== state.focusedFolder) {
+        return;
+      }
+    }
+    const pathParts = activeFile.path.split("/");
+    pathParts.pop();
+    let currentPath = "";
+    for (const part of pathParts) {
+      if (currentPath === "") {
+        currentPath = part;
+      } else {
+        currentPath = currentPath + "/" + part;
+      }
+      if (currentPath) {
+        state.expandedFolders.add(currentPath);
+      }
     }
   }
   buildFolderTree(leafId) {
@@ -1014,6 +1041,15 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
       });
     }
     this.renderFolder(startFolder, treeContainer, 0, leafId);
+    const activeFileElement = state.folderPanel.querySelector(".file-item.is-active");
+    if (activeFileElement) {
+      setTimeout(() => {
+        activeFileElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }, 50);
+    }
   }
   renderFolder(folder, container, level, leafId) {
     const state = this.leafStates.get(leafId);
@@ -1078,7 +1114,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             clickEvent.stopPropagation();
             menu.remove();
             new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), (fileName) => {
-              (async () => {
+              void (async () => {
                 if (fileName) {
                   let filePath = child.path;
                   if (filePath === "/") {
@@ -1106,7 +1142,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             clickEvent.stopPropagation();
             menu.remove();
             new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), (folderName2) => {
-              (async () => {
+              void (async () => {
                 if (folderName2) {
                   let folderPath = child.path;
                   if (folderPath === "/") {
@@ -1144,7 +1180,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
             deleteBtn.addEventListener("click", () => {
-              (async () => {
+              void (async () => {
                 confirmModal.close();
                 try {
                   await this.app.fileManager.trashFile(child);
@@ -1192,7 +1228,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
         const fileName = fileItem.createSpan("file-name");
         fileName.textContent = child.name;
         fileItem.addEventListener("click", () => {
-          (async () => {
+          void (async () => {
             const leaf = this.app.workspace.getLeaf();
             await leaf.openFile(child);
             if (state.folderPanel) {
@@ -1218,7 +1254,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
           const openInNewTabItem = menu.createDiv("context-menu-item");
           openInNewTabItem.textContent = t("openInNewTab", this.locale);
           openInNewTabItem.addEventListener("click", (clickEvent) => {
-            (async () => {
+            void (async () => {
               clickEvent.stopPropagation();
               menu.remove();
               const leaf = this.app.workspace.getLeaf("tab");
@@ -1235,7 +1271,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             clickEvent.stopPropagation();
             menu.remove();
             new InputModal(this.app, t("newFileTitle", this.locale), t("untitled", this.locale), (fileName2) => {
-              (async () => {
+              void (async () => {
                 if (fileName2 && parentFolder) {
                   let filePath = parentFolder.path;
                   if (filePath === "/") {
@@ -1262,7 +1298,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             clickEvent.stopPropagation();
             menu.remove();
             new InputModal(this.app, t("newFolderTitle", this.locale), t("newFolderName", this.locale), (folderName) => {
-              (async () => {
+              void (async () => {
                 if (folderName && parentFolder) {
                   let folderPath = parentFolder.path;
                   if (folderPath === "/") {
@@ -1300,7 +1336,7 @@ var FloatingExplorerPlugin = class extends import_obsidian.Plugin {
             });
             const deleteBtn = buttonContainer.createEl("button", { text: t("delete", this.locale), cls: "mod-warning" });
             deleteBtn.addEventListener("click", () => {
-              (async () => {
+              void (async () => {
                 confirmModal.close();
                 try {
                   await this.app.fileManager.trashFile(child);

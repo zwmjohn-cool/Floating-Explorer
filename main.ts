@@ -1040,6 +1040,9 @@ export default class FloatingExplorerPlugin extends Plugin {
 
 		this.cancelHidePanel(leafId);
 
+		// 展开当前活动文件的所有父目录
+		this.expandActiveFilePath(leafId);
+
 		// 构建文件夹树
 		this.buildFolderTree(leafId);
 
@@ -1067,6 +1070,44 @@ export default class FloatingExplorerPlugin extends Plugin {
 		if (state.hideTimeout) {
 			clearTimeout(state.hideTimeout);
 			state.hideTimeout = null;
+		}
+	}
+
+	expandActiveFilePath(leafId: string) {
+		const state = this.leafStates.get(leafId);
+		if (!state) return;
+
+		// 获取当前活动文件
+		const activeFile = this.app.workspace.getActiveFile();
+		if (!activeFile) return;
+
+		// 如果在聚焦模式，检查当前文件是否在聚焦文件夹内
+		if (state.focusedFolder) {
+			// 检查活动文件是否在聚焦文件夹内
+			if (!activeFile.path.startsWith(state.focusedFolder + '/') &&
+				activeFile.path !== state.focusedFolder) {
+				// 当前文件在聚焦文件夹外，不展开
+				return;
+			}
+		}
+
+		// 获取文件路径的所有父目录
+		const pathParts = activeFile.path.split('/');
+		// 移除文件名本身，只保留目录路径
+		pathParts.pop();
+
+		// 构建并展开所有父目录路径
+		let currentPath = '';
+		for (const part of pathParts) {
+			if (currentPath === '') {
+				currentPath = part;
+			} else {
+				currentPath = currentPath + '/' + part;
+			}
+			// 添加到展开的文件夹集合中
+			if (currentPath) {
+				state.expandedFolders.add(currentPath);
+			}
 		}
 	}
 
@@ -1107,6 +1148,18 @@ export default class FloatingExplorerPlugin extends Plugin {
 		}
 
 		this.renderFolder(startFolder, treeContainer, 0, leafId);
+
+		// 自动滚动到当前活动文件
+		const activeFileElement = state.folderPanel.querySelector('.file-item.is-active');
+		if (activeFileElement) {
+			// 使用setTimeout确保DOM完全渲染
+			setTimeout(() => {
+				(activeFileElement as HTMLElement).scrollIntoView({
+					behavior: 'smooth',
+					block: 'center'
+				});
+			}, 50);
+		}
 	}
 
 	renderFolder(folder: TFolder, container: HTMLElement, level: number, leafId: string) {
