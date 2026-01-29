@@ -231,6 +231,35 @@
 	font-weight: 500;
 }
 
+/* Collapse All bar */
+.collapse-all-bar {
+	display: flex;
+	align-items: center;
+	padding: 6px 12px;
+	margin: 4px 8px 8px 8px;
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.collapse-all-bar:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.collapse-all-icon {
+	font-size: 14px;
+	margin-right: 8px;
+	color: var(--text-accent);
+}
+
+.collapse-all-text {
+	font-size: 12px;
+	color: var(--text-muted);
+	font-weight: 400;
+}
+
 /* Modal Input Styling */
 .floating-modal-input {
 	width: 100%;
